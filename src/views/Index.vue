@@ -9,7 +9,9 @@
       <v-toolbar dense flat>
         <v-select
           class="body-2"
-          :items="namespaceSelectList"
+          :items="namespaceNameList"
+          v-model="currentNamespace"
+          @change="updateCurrentNamespace"
           outlined
           flat
           hide-details
@@ -17,7 +19,7 @@
           dense
         ></v-select>
       </v-toolbar>
-      <v-list dense>
+      <v-list dense nav class="px-4">
         <v-list-item
           v-for="(item, i) in navList"
           :key="`nav-${i}`"
@@ -33,7 +35,7 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import { State, Mutation, Action } from 'vuex-class';
+import { State, Mutation, Action, Getter } from 'vuex-class';
 
 import { Namespace } from '@/types/backend';
 
@@ -42,7 +44,17 @@ import NamespaceHandler from '@/handler/namespaceHandler';
 @Component
 export default class IndexView extends Vue {
   @State('namespaceList') namespaceList!: Namespace[];
+  @Getter('namespaceNameList') namespaceNameList!: () => string[];
   @Action('getNamespaceList') getNamespaceList!: () => void;
+
+  currentNamespace = '';
+
+  updateCurrentNamespace(v: string) {
+    this.$router.push({
+      path: this.$route.path,
+      query: { ...this.$route.query, ...{ namespace: v } }
+    });
+  }
 
   get navList() {
     return [
@@ -61,18 +73,13 @@ export default class IndexView extends Vue {
     ];
   }
 
-  get namespaceSelectList() {
-    return this.namespaceList.map((e) => {
-      return e.metadata.name;
-    });
-  }
-
   mounted() {
     if (!this.$route.query.namespace) {
       this.$router.push({
-        query: { ...this.$route.query, ...{ namespace: 'defaults' } }
+        query: { ...this.$route.query, ...{ namespace: 'default' } }
       });
     }
+    this.currentNamespace = String(this.$route.query.namespace);
     this.getNamespaceList();
   }
 }

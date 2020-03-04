@@ -13,7 +13,11 @@ const state: RootState = {
   namespaceList: []
 };
 
-const getters = {};
+const getters = {
+  namespaceNameList: (s: RootState) => {
+    return s.namespaceList.map((e) => e.metadata.name);
+  }
+};
 
 const mutations = {
   updateNamespaceList: (s: RootState, n: Namespace[]) => {
