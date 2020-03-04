@@ -6,11 +6,11 @@ class BasicHandler {
     if (rsp.data) {
       rspData = rsp.data;
     }
-    return rspData;
+    return Promise.resolve(rspData);
   }
 
   static getError(rsp: AxiosError) {
-    return rsp.response?.status;
+    return Promise.reject(rsp.response?.status);
   }
 
   static async getRequest(url: string, params: any) {
