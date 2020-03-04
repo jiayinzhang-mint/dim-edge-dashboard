@@ -5,7 +5,14 @@ import router from './router';
 import store from './store';
 import vuetify from './plugins/vuetify';
 
+import DateHelper from '@/utils/dateHelper';
+
 Vue.config.productionTip = false;
+
+// format date
+Vue.filter('format', (date: string, fmt: string) =>
+  DateHelper.format(date, fmt)
+);
 
 new Vue({
   router,

@@ -13,16 +13,20 @@ const routes = [
     component: () => import('@/views/Index.vue'),
     children: [
       {
-        path: 'dashboard',
-        component: () => import('@/views/Service.vue')
+        path: '/dashboard',
+        component: () => import('@/views/service/Service.vue')
       },
       {
-        path: 'deployment',
-        component: () => import('@/views/Service.vue')
+        path: '/deployment',
+        component: () => import('@/views/service/Service.vue')
       },
       {
-        path: 'service',
-        component: () => import('@/views/Service.vue')
+        path: '/service',
+        component: () => import('@/views/service/Service.vue')
+      },
+      {
+        path: '/service/:name',
+        component: () => import('@/views/service/Info.vue')
       }
     ]
   }

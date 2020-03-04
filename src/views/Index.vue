@@ -3,7 +3,7 @@
     <v-navigation-drawer app permanent>
       <v-toolbar dense flat>
         <v-toolbar-title class="subtitle-1 font-weight-black">
-          DIMedge
+          DIM<span class="primary--text">edge</span>
         </v-toolbar-title>
       </v-toolbar>
       <v-toolbar dense flat>
@@ -29,7 +29,25 @@
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
-    <v-content> <router-view></router-view> </v-content>
+    <v-app-bar flat color="transparent" app dense>
+      <v-btn icon small class="ml-0" @click="$router.go(-1)"
+        ><v-icon size="20">mdi-arrow-left</v-icon></v-btn
+      >
+      <v-breadcrumbs :items="breadCrumbs">
+        <template v-slot:item="{ item }">
+          <v-breadcrumbs-item
+            class="font-weight-black"
+            :href="item.href"
+            :disabled="item.disabled"
+          >
+            {{ item.text }}
+          </v-breadcrumbs-item>
+        </template>
+      </v-breadcrumbs>
+    </v-app-bar>
+    <v-content>
+      <router-view></router-view>
+    </v-content>
   </v-app>
 </template>
 
@@ -60,17 +78,28 @@ export default class IndexView extends Vue {
     return [
       {
         name: 'Dashboard',
-        route: { path: '/index/dashboard', query: this.$route.query }
+        route: { path: '/dashboard', query: this.$route.query }
       },
       {
         name: 'Deployment',
-        route: { path: '/index/deployment', query: this.$route.query }
+        route: { path: '/deployment', query: this.$route.query }
       },
       {
         name: 'Service',
-        route: { path: '/index/service', query: this.$route.query }
+        route: { path: '/service', query: this.$route.query }
       }
     ];
+  }
+
+  get breadCrumbs() {
+    return this.$route.path
+      .split('/')
+      .slice(1)
+      .map((e) => {
+        return {
+          text: e
+        };
+      });
   }
 
   mounted() {
