@@ -21,7 +21,7 @@
       </template>
       <template v-slot:item.port="{ item }">
         <v-chip
-          class="mr-2"
+          class="mr-2 font-weight-black"
           v-for="p in item.spec.ports"
           :key="p.nodePort"
           small

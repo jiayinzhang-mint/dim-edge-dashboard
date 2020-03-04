@@ -2,33 +2,10 @@ export interface StringMap {
   [key: string]: string;
 }
 
-export class Namespace {
-  metadata!: Metadata;
-  spec!: {
-    finalizers: string[];
-  };
-  status!: {
-    phase: string[];
-    conditions: Condition[];
-  };
-}
-
-export class Service {
-  metadata!: Metadata;
-  spec!: {
-    ports: Port[];
-    selector: StringMap;
-    clusterIP: string;
-    type: string;
-    sessionAffinity: string;
-    externalTrafficPolicy: string;
-  };
-  status!: {
-    loadBalancer: NodeBalancerIngress[];
-  };
-}
-
 export class Metadata {
+  constructor() {
+    this.name = '';
+  }
   name!: string;
   generateName!: string;
   namespace!: string;
@@ -65,4 +42,36 @@ export class Condition {
 export class NodeBalancerIngress {
   ip!: string;
   hostname!: string;
+}
+
+export class Namespace {
+  metadata!: Metadata;
+  spec!: {
+    finalizers: string[];
+  };
+  status!: {
+    phase: string[];
+    conditions: Condition[];
+  };
+}
+
+export class Service {
+  constructor() {
+    this.metadata = new Metadata();
+    this.status = {
+      loadBalancer: []
+    };
+  }
+  metadata!: Metadata;
+  spec!: {
+    ports: Port[];
+    selector: StringMap;
+    clusterIP: string;
+    type: string;
+    sessionAffinity: string;
+    externalTrafficPolicy: string;
+  };
+  status!: {
+    loadBalancer: NodeBalancerIngress[];
+  };
 }

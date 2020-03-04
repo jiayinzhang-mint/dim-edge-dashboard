@@ -6,7 +6,7 @@
           DIM<span class="primary--text">edge</span>
         </v-toolbar-title>
       </v-toolbar>
-      <v-toolbar dense flat>
+      <v-toolbar dense flat class="mt-3">
         <v-select
           class="body-2"
           :items="namespaceNameList"
