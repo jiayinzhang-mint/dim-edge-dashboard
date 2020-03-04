@@ -1,18 +1,46 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js App" />
-  </div>
+  <v-app>
+    <v-row no-gutters style="height:100vh">
+      <v-col cols="9"> </v-col>
+      <v-col cols="3">
+        <v-row no-gutters justify="start" align="center" style="height:100vh">
+          <v-container fluid>
+            <div class="headline font-weight-black mb-5">DIMedge</div>
+            <v-form>
+              <v-text-field
+                class="mb-3"
+                hide-details
+                dense
+                outlined
+                label="Username"
+              ></v-text-field>
+              <v-text-field
+                class="mb-5"
+                dense
+                hide-details
+                outlined
+                type="password"
+                label="Password"
+              ></v-text-field>
+            </v-form>
+            <v-btn depressed color="primary" @click="login">Login</v-btn>
+          </v-container>
+        </v-row>
+      </v-col>
+    </v-row>
+  </v-app>
 </template>
 
-<script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue';
+<script lang="ts">
+import { Component, Prop, Vue } from 'vue-property-decorator';
 
-export default {
-  name: 'Home',
-  components: {
-    HelloWorld
-  }
-};
+@Component
+export default class Home extends Vue {
+  username = '';
+  password = '';
+
+  async login() {}
+}
 </script>
+
+<style scoped></style>
