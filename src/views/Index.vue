@@ -24,7 +24,7 @@
 import { Component, Prop, Vue } from 'vue-property-decorator';
 
 @Component
-export default class Index extends Vue {
+export default class IndexView extends Vue {
   get navList() {
     return [
       {
@@ -32,12 +32,12 @@ export default class Index extends Vue {
         route: '/index'
       },
       {
-        name: 'Deployments',
+        name: 'Deployment',
         route: '/index'
       },
       {
-        name: 'Services',
-        route: '/index'
+        name: 'Service',
+        route: '/service'
       }
     ];
   }
