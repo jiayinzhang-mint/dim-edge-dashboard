@@ -1,12 +1,12 @@
 <template>
   <v-app>
-    <v-navigation-drawer app permanent>
-      <v-toolbar dense flat>
+    <v-navigation-drawer color="transparent" app permanent>
+      <v-toolbar dense flat color="transparent">
         <v-toolbar-title class="subtitle-1 font-weight-black">
           DIM<span class="primary--text">edge</span>
         </v-toolbar-title>
       </v-toolbar>
-      <v-toolbar dense flat class="mt-3">
+      <v-toolbar dense flat class="mt-3" color="transparent">
         <v-select
           class="body-2"
           :items="namespaceNameList"
@@ -87,6 +87,10 @@ export default class IndexView extends Vue {
       {
         name: 'Service',
         route: { path: '/service', query: this.$route.query }
+      },
+      {
+        name: 'Pod',
+        route: { path: '/pod', query: this.$route.query }
       }
     ];
   }

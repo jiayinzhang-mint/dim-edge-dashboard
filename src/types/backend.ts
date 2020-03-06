@@ -58,6 +58,14 @@ export class Namespace {
 export class Service {
   constructor() {
     this.metadata = new Metadata();
+    this.spec = {
+      ports: [],
+      selector: {},
+      clusterIP: '',
+      type: '',
+      sessionAffinity: '',
+      externalTrafficPolicy: ''
+    };
     this.status = {
       loadBalancer: []
     };

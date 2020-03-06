@@ -9,8 +9,9 @@ export default new Vuetify({
     options: {
       customProperties: true
     },
+    dark: true,
     themes: {
-      light: {
+      dark: {
         primary: colors.teal.lighten2,
         secondary: '#424242',
         accent: '#82B1FF',

@@ -5,7 +5,9 @@
       <v-col cols="3">
         <v-row no-gutters justify="start" align="center" style="height:100vh">
           <v-container fluid>
-            <div class="headline font-weight-black mb-5">DIMedge</div>
+            <div class="headline font-weight-black mb-5">
+              DIM<span class="primary--text">edge</span>
+            </div>
             <v-form>
               <v-text-field
                 class="mb-3"

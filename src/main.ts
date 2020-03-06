@@ -5,6 +5,9 @@ import router from './router';
 import store from './store';
 import vuetify from './plugins/vuetify';
 
+import InfoCard from '@/plugins/info-card/Main.vue';
+Vue.component('info-card', InfoCard);
+
 import DateHelper from '@/utils/dateHelper';
 
 Vue.config.productionTip = false;

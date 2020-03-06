@@ -1,6 +1,7 @@
 <template>
   <div>
     <v-data-table
+      class="transparent"
       disable-sort
       disable-filtering
       :headers="headers"

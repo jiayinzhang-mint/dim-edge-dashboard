@@ -2,166 +2,138 @@
   <v-container fluid>
     <v-row dense>
       <v-col cols="12">
-        <v-card outlined>
-          <v-toolbar dense flat color="transparent">
-            <v-toolbar-title class="subtitle-1 font-weight-black">
-              Metadata
-            </v-toolbar-title>
-          </v-toolbar>
-          <v-container fluid>
-            <v-row dense>
-              <v-col cols="4">
-                <v-card outlined height="100%">
-                  <v-card-title class="body-2 font-weight-black"
-                    >Name</v-card-title
-                  >
-                  <v-card-text>{{ service.metadata.name }}</v-card-text>
-                </v-card>
-              </v-col>
-              <v-col cols="4">
-                <v-card outlined height="100%">
-                  <v-card-title class="body-2 font-weight-black"
-                    >Namespace</v-card-title
-                  >
-                  <v-card-text>{{ service.metadata.namespace }}</v-card-text>
-                </v-card>
-              </v-col>
-              <v-col cols="4">
-                <v-card outlined height="100%">
-                  <v-card-title class="body-2 font-weight-black"
-                    >Selflink</v-card-title
-                  >
-                  <v-card-text>{{ service.metadata.selfLink }}</v-card-text>
-                </v-card>
-              </v-col>
-              <v-col cols="4">
-                <v-card outlined height="100%">
-                  <v-card-title class="body-2 font-weight-black"
-                    >UID</v-card-title
-                  >
-                  <v-card-text>{{ service.metadata.uid }}</v-card-text>
-                </v-card>
-              </v-col>
-              <v-col cols="4">
-                <v-card outlined height="100%">
-                  <v-card-title class="body-2 font-weight-black"
-                    >Resource version</v-card-title
-                  >
-                  <v-card-text>{{
-                    service.metadata.resourceVersion
-                  }}</v-card-text>
-                </v-card>
-              </v-col>
-              <v-col cols="4">
-                <v-card outlined height="100%">
-                  <v-card-title class="body-2 font-weight-black"
-                    >Created</v-card-title
-                  >
-                  <v-card-text>{{
-                    service.metadata.creationTimestamp
-                      | format('yyyy-MM-dd hh:mm:ss')
-                  }}</v-card-text>
-                </v-card>
-              </v-col>
-              <v-col cols="6">
-                <v-card outlined height="100%">
-                  <v-card-title class="body-2 font-weight-black"
-                    >Labels</v-card-title
-                  >
-                  <v-list dense>
-                    <v-list-item
-                      v-for="(item, i) in labelList"
-                      :key="`label-${i}`"
-                    >
-                      <v-list-item-title>{{ item.text }}</v-list-item-title>
-                      <v-list-item-subtitle>{{
-                        item.value
-                      }}</v-list-item-subtitle>
-                    </v-list-item>
-                  </v-list>
-                </v-card>
-              </v-col>
-              <v-col cols="6">
-                <v-card outlined height="100%">
-                  <v-card-title class="body-2 font-weight-black"
-                    >Labels</v-card-title
-                  >
-                  <v-list dense>
-                    <v-list-item
-                      v-for="(item, i) in annotationList"
-                      :key="`label-${i}`"
-                    >
-                      <v-list-item-title>{{ item.text }}</v-list-item-title>
-                      <v-list-item-subtitle>{{
-                        item.value
-                      }}</v-list-item-subtitle>
-                    </v-list-item>
-                  </v-list>
-                </v-card>
-              </v-col>
-            </v-row>
-          </v-container>
-        </v-card>
+        <v-toolbar dense flat color="transparent">
+          <v-toolbar-title class="subtitle-1 font-weight-black">
+            Metadata
+          </v-toolbar-title>
+        </v-toolbar>
+        <v-container fluid>
+          <v-row dense>
+            <v-col cols="3">
+              <info-card title="Name">
+                {{ service.metadata.name }}
+              </info-card>
+            </v-col>
+            <v-col cols="3">
+              <info-card title="Namespace">
+                {{ service.metadata.namespace }}
+              </info-card>
+            </v-col>
+            <v-col cols="3">
+              <info-card title="Selflink">
+                {{ service.metadata.selfLink }}
+              </info-card>
+            </v-col>
+            <v-col cols="3">
+              <info-card title="UID">
+                {{ service.metadata.uid }}
+              </info-card>
+            </v-col>
+            <v-col cols="3">
+              <info-card title="Resource version">
+                {{ service.metadata.resourceVersion }}
+              </info-card>
+            </v-col>
+            <v-col cols="3">
+              <info-card title="Created">
+                {{
+                  service.metadata.creationTimestamp
+                    | format('yyyy-MM-dd hh:mm:ss')
+                }}
+              </info-card>
+            </v-col>
+            <v-col cols="3">
+              <info-card title="Labels">
+                <v-chip
+                  small
+                  class="mr-2 font-weight-black"
+                  v-for="(item, i) in labelList"
+                  :key="`label-${i}`"
+                >
+                  {{ item.text }} :
+                  {{ item.value }}
+                </v-chip>
+              </info-card>
+            </v-col>
+            <v-col cols="3">
+              <info-card title="Annotations">
+                <v-chip
+                  small
+                  class="mr-2 font-weight-black"
+                  v-for="(item, i) in annotationList"
+                  :key="`label-${i}`"
+                >
+                  {{ item.text }} :
+                  {{ item.value }}
+                </v-chip>
+              </info-card>
+            </v-col>
+          </v-row>
+        </v-container>
       </v-col>
       <v-col cols="12">
-        <v-card outlined>
-          <v-toolbar dense flat color="transparent">
-            <v-toolbar-title class="subtitle-1 font-weight-black">
-              Spec
-            </v-toolbar-title>
-          </v-toolbar>
-          <v-container fluid>
-            <v-row dense>
-              <v-col cols="3">
-                <v-card outlined height="100%">
-                  <v-card-title class="body-2 font-weight-black"
-                    >Cluster IP</v-card-title
-                  >
-                  <v-card-text>{{ service.spec.clusterIP }}</v-card-text>
-                </v-card>
-              </v-col>
-              <v-col cols="3">
-                <v-card outlined height="100%">
-                  <v-card-title class="body-2 font-weight-black"
-                    >Type</v-card-title
-                  >
-                  <v-card-text>{{ service.spec.type }}</v-card-text>
-                </v-card>
-              </v-col>
-              <v-col cols="3">
-                <v-card outlined height="100%">
-                  <v-card-title class="body-2 font-weight-black"
-                    >Session affinity</v-card-title
-                  >
-                  <v-card-text>{{ service.spec.sessionAffinity }}</v-card-text>
-                </v-card>
-              </v-col>
-              <v-col cols="3">
-                <v-card outlined height="100%">
-                  <v-card-title class="body-2 font-weight-black"
-                    >External traffic policy</v-card-title
-                  >
-                  <v-card-text>{{
-                    service.spec.externalTrafficPolicy
-                  }}</v-card-text>
-                </v-card>
-              </v-col>
-            </v-row>
-            {{ service.spec }}
-          </v-container>
-        </v-card>
+        <v-toolbar dense flat color="transparent">
+          <v-toolbar-title class="subtitle-1 font-weight-black">
+            Spec
+          </v-toolbar-title>
+        </v-toolbar>
+        <v-container fluid>
+          <v-row dense>
+            <v-col cols="3">
+              <info-card title="Cluster IP">
+                {{ service.spec.clusterIP }}
+              </info-card>
+            </v-col>
+            <v-col cols="3">
+              <info-card title="Type">
+                {{ service.spec.type }}
+              </info-card>
+            </v-col>
+            <v-col cols="3">
+              <info-card title="Session affinity">
+                {{ service.spec.sessionAffinity }}
+              </info-card>
+            </v-col>
+            <v-col cols="3">
+              <info-card title="External traffic policy">
+                {{ service.spec.externalTrafficPolicy }}
+              </info-card>
+            </v-col>
+            <v-col cols="3">
+              <info-card title="Selector">
+                <v-chip
+                  small
+                  class="mr-2 font-weight-black"
+                  v-for="(item, i) in selectorList"
+                  :key="`label-${i}`"
+                >
+                  {{ item.text }} :
+                  {{ item.value }}
+                </v-chip>
+              </info-card>
+            </v-col>
+          </v-row>
+          <v-row dense>
+            <v-col cols="12">
+              <v-data-table
+                disable-filtering
+                disable-sort
+                :headers="portHeaders"
+                :items="service.spec.ports"
+              ></v-data-table>
+            </v-col>
+          </v-row>
+        </v-container>
       </v-col>
       <v-col cols="12">
-        <v-card outlined>
-          <v-toolbar dense flat color="transparent">
-            <v-toolbar-title class="subtitle-1 font-weight-black">
-              Status
-            </v-toolbar-title>
-          </v-toolbar>
-          <v-container fluid>
-            {{ service.status }}
-          </v-container>
-        </v-card>
+        <v-toolbar dense flat color="transparent">
+          <v-toolbar-title class="subtitle-1 font-weight-black">
+            Status
+          </v-toolbar-title>
+        </v-toolbar>
+        <v-container fluid>
+          {{ service.status }}
+        </v-container>
       </v-col>
     </v-row>
   </v-container>
@@ -192,6 +164,35 @@ export default class ServiceInfoView extends Vue {
 
   get annotationList() {
     return mapToList(this.service.metadata.annotations);
+  }
+
+  get selectorList() {
+    return mapToList(this.service.spec.selector);
+  }
+
+  get portHeaders() {
+    return [
+      {
+        text: 'Name',
+        value: 'name'
+      },
+      {
+        text: 'Protocol',
+        value: 'protocol'
+      },
+      {
+        text: 'Port',
+        value: 'port'
+      },
+      {
+        text: 'Target port',
+        value: 'targetPort'
+      },
+      {
+        text: 'Node port',
+        value: 'nodePort'
+      }
+    ];
   }
 
   mounted() {

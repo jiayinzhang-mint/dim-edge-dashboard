@@ -27,6 +27,10 @@ const routes = [
       {
         path: '/service/:name',
         component: () => import('@/views/service/Info.vue')
+      },
+      {
+        path: '/pod',
+        component: () => import('@/views/service/Service.vue')
       }
     ]
   }
