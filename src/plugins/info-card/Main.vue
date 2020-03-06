@@ -1,6 +1,13 @@
 <template>
   <v-hover v-slot:default="{ hover }">
-    <v-card :elevation="hover ? 12 : 0" ripple outlined flat height="100%">
+    <v-card
+      class="transparent"
+      :elevation="hover ? 12 : 0"
+      ripple
+      outlined
+      flat
+      height="100%"
+    >
       <v-card-title class="body-2 font-weight-black primary--text">{{
         title
       }}</v-card-title>

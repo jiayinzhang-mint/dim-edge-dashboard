@@ -25,7 +25,12 @@
           :key="`nav-${i}`"
           :to="item.route"
         >
-          <v-list-item-title>{{ item.name }}</v-list-item-title>
+          <v-subheader
+            class="px-0 mt-3 font-weight-black"
+            v-if="item.subheader"
+            >{{ item.subheader }}</v-subheader
+          >
+          <v-list-item-title v-else>{{ item.name }}</v-list-item-title>
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
@@ -77,6 +82,9 @@ export default class IndexView extends Vue {
   get navList() {
     return [
       {
+        subheader: 'Dev'
+      },
+      {
         name: 'Dashboard',
         route: { path: '/dashboard', query: this.$route.query }
       },
@@ -91,6 +99,17 @@ export default class IndexView extends Vue {
       {
         name: 'Pod',
         route: { path: '/pod', query: this.$route.query }
+      },
+      {
+        subheader: 'Production'
+      },
+      {
+        name: 'InfluxDB',
+        route: { path: '/influxdb', query: this.$route.query }
+      },
+      {
+        name: 'Node',
+        route: { path: '/node', query: this.$route.query }
       }
     ];
   }

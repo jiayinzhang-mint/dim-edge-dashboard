@@ -30,7 +30,15 @@ const routes = [
       },
       {
         path: '/pod',
+        component: () => import('@/views/pod/Pod.vue')
+      },
+      {
+        path: '/node',
         component: () => import('@/views/service/Service.vue')
+      },
+      {
+        path: '/influxdb',
+        component: () => import('@/views/influxdb/InfluxDB.vue')
       }
     ]
   }

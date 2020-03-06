@@ -116,6 +116,7 @@
           <v-row dense>
             <v-col cols="12">
               <v-data-table
+                class="transparent"
                 disable-filtering
                 disable-sort
                 :headers="portHeaders"
