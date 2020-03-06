@@ -4,6 +4,7 @@ import './registerServiceWorker';
 import router from './router';
 import store from './store';
 import vuetify from './plugins/vuetify';
+import '@/styles/style.css';
 
 import InfoCard from '@/plugins/info-card/Main.vue';
 Vue.component('info-card', InfoCard);

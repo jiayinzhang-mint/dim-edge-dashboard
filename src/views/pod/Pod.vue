@@ -38,7 +38,7 @@
           class="mr-1"
           icon
           small
-          :to="{ path: `/service/${item.metadata.name}`, query: $route.query }"
+          :to="{ path: `/pod/${item.metadata.name}`, query: $route.query }"
           ><v-icon size="20">mdi-information-outline</v-icon></v-btn
         >
         <v-btn icon small color="error"

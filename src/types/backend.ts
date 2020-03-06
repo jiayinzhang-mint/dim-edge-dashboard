@@ -228,7 +228,28 @@ export class Service {
 export class Pod {
   constructor() {
     this.metadata = new Metadata();
-    this.spec;
+    this.spec = {
+      volumes: [],
+      containers: [],
+      restartPolicy: '',
+      terminationGracePeriodSeconds: 0,
+      dnsPolicy: '',
+      serviceAccountName: '',
+      serviceAccount: '',
+      nodeName: '',
+      hostname: '',
+      subdomain: '',
+      schedulerName: '',
+      priority: 0,
+      enableServiceLinks: false,
+      securityContext: {},
+      tolerations: []
+    };
+    this.status = {
+      conditions: [],
+      podIPs: [],
+      containerStatuses: []
+    };
   }
   metadata!: Metadata;
   spec!: {
@@ -249,13 +270,13 @@ export class Pod {
     tolerations: Toleration[];
   };
   status!: {
-    phase: string;
+    phase?: string;
     conditions: Condition[];
-    hostIP: string;
-    podIP: string;
+    hostIP?: string;
+    podIP?: string;
     podIPs: IP[];
-    startTime: string;
+    startTime?: string;
     containerStatuses: ContainerStatus[];
-    qosClass: string;
+    qosClass?: string;
   };
 }

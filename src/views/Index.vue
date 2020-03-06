@@ -6,7 +6,7 @@
           DIM<span class="primary--text">edge</span>
         </v-toolbar-title>
       </v-toolbar>
-      <v-toolbar dense flat class="mt-3" color="transparent">
+      <!-- <v-toolbar dense flat class="mt-3" color="transparent">
         <v-select
           class="body-2"
           :items="namespaceNameList"
@@ -18,8 +18,8 @@
           label="Namespace"
           dense
         ></v-select>
-      </v-toolbar>
-      <v-list dense nav class="px-4">
+      </v-toolbar> -->
+      <v-list dense nav>
         <v-list-item
           v-for="(item, i) in navList"
           :key="`nav-${i}`"
@@ -34,7 +34,7 @@
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
-    <v-app-bar flat color="transparent" app dense>
+    <v-app-bar flat class="acrylic" app dense>
       <v-btn icon small class="ml-0" @click="$router.go(-1)"
         ><v-icon size="20">mdi-arrow-left</v-icon></v-btn
       >

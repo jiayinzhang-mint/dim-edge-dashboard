@@ -33,6 +33,10 @@ const routes = [
         component: () => import('@/views/pod/Pod.vue')
       },
       {
+        path: '/pod/:name',
+        component: () => import('@/views/pod/Info.vue')
+      },
+      {
         path: '/node',
         component: () => import('@/views/service/Service.vue')
       },
