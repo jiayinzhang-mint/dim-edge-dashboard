@@ -10,6 +10,7 @@ import InfoCard from '@/plugins/info-card/Main.vue';
 Vue.component('info-card', InfoCard);
 
 import DateHelper from '@/utils/dateHelper';
+import { cpuUsage, memUsage } from './utils/convert';
 
 Vue.config.productionTip = false;
 
@@ -17,6 +18,15 @@ Vue.config.productionTip = false;
 Vue.filter('format', (date: string, fmt: string) =>
   DateHelper.format(date, fmt)
 );
+
+// get cpu usage
+Vue.filter('cpu', (v: string) => {
+  return cpuUsage(v);
+});
+
+Vue.filter('mem', (v: string) => {
+  return memUsage(v);
+});
 
 new Vue({
   router,

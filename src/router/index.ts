@@ -43,6 +43,10 @@ const routes = [
       {
         path: '/influxdb',
         component: () => import('@/views/influxdb/InfluxDB.vue')
+      },
+      {
+        path: '/influxdb/:name',
+        component: () => import('@/views/influxdb/Info.vue')
       }
     ]
   }

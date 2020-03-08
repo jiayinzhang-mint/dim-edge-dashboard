@@ -12,3 +12,11 @@ export const mapToList = (map: any) => {
 
   return list;
 };
+
+export const cpuUsage = (v: string) => {
+  return (Number(v.slice(0, -1)) / 100000).toFixed(2);
+};
+
+export const memUsage = (v: string) => {
+  return (Number(v.slice(0, -2)) / 1000 / 8).toFixed(2);
+};

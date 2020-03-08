@@ -59,7 +59,6 @@ export default class PodView extends Vue {
   podList: Pod[] = [];
 
   async getPodList() {
-    console.log('shit');
     this.podList = await PodHandler.getPodList(this.namespace);
   }
 

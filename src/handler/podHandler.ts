@@ -1,11 +1,12 @@
 import BasicHandler from './basicHandler';
-import { Pod } from '@/types/backend';
+import { Pod, Container } from '@/types/backend';
 
 export default class PodHandler {
-  static async getPodList(namespace: string) {
+  static async getPodList(namespace: string, serviceName?: string) {
     try {
       const rsp = await BasicHandler.getRequest('/api/k8s/pod/list', {
-        namespace
+        namespace,
+        serviceName
       });
       return Promise.resolve(rsp.items as Pod[]);
     } catch (err) {
@@ -22,6 +23,30 @@ export default class PodHandler {
       return Promise.resolve(rsp as Pod);
     } catch (err) {
       return Promise.reject(new Pod());
+    }
+  }
+
+  static async getPodMetricsList(namespace: string, serviceName?: string) {
+    try {
+      const rsp = await BasicHandler.getRequest('/api/k8s/pod/metrics/list', {
+        namespace,
+        serviceName
+      });
+      return Promise.resolve(rsp.items as Pod[]);
+    } catch (err) {
+      return Promise.reject([] as Pod[]);
+    }
+  }
+
+  static async getOnePodMetrics(namespace: string, name: string) {
+    try {
+      const rsp = await BasicHandler.getRequest('/api/k8s/pod/metrics', {
+        namespace,
+        name
+      });
+      return Promise.resolve(rsp.containers as Container[]);
+    } catch (err) {
+      return Promise.reject([] as Container[]);
     }
   }
 }

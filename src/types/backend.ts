@@ -183,6 +183,10 @@ export class ContainerStatus {
   imageID!: string;
   containerID!: string;
   started!: boolean;
+  usage!: {
+    cpu: string;
+    memory: string;
+  };
 }
 
 export class Namespace {
@@ -278,5 +282,43 @@ export class Pod {
     startTime?: string;
     containerStatuses: ContainerStatus[];
     qosClass?: string;
+  };
+}
+
+export class VolumeClaim {
+  constructor() {
+    this.metadata = new Metadata();
+    this.spec = {
+      accessModes: [],
+      resource: {
+        requests: {
+          storage: ''
+        }
+      }
+    };
+    this.status = {
+      capacity: {
+        storage: ''
+      }
+    };
+  }
+  metadata!: Metadata;
+  spec!: {
+    accessModes: string[];
+    resource: {
+      requests: {
+        storage: string;
+      };
+    };
+    volumeName?: string;
+    storageClassName?: string;
+    volumeMode?: string;
+  };
+  status!: {
+    phase?: string;
+    accessModes?: string[];
+    capacity?: {
+      storage: string;
+    };
   };
 }
