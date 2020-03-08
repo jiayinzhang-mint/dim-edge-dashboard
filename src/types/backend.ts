@@ -53,6 +53,16 @@ export interface ObjectMeta {
   uid?: string;
 }
 
+export interface Image {
+  names: string[];
+  sizeBytes: number;
+}
+
+export interface Address {
+  type: string;
+  address: string;
+}
+
 export interface ResourceDetail {
   objectMeta: ObjectMeta;
   typeMeta: TypeMeta;
@@ -122,6 +132,7 @@ export class Condition {
   status!: string;
   lastProbeTime!: string;
   lastTransitionTime!: string;
+  lastHeartbeatTime!: string;
   reason!: string;
   message!: string;
 }
@@ -183,10 +194,6 @@ export class ContainerStatus {
   imageID!: string;
   containerID!: string;
   started!: boolean;
-  usage!: {
-    cpu: string;
-    memory: string;
-  };
 }
 
 export class Namespace {
@@ -320,5 +327,81 @@ export class VolumeClaim {
     capacity?: {
       storage: string;
     };
+  };
+}
+
+export class Metrics {
+  constructor() {
+    this.usage = {
+      cpu: '',
+      memory: ''
+    };
+  }
+  name?: string;
+  metadata!: Metadata;
+  timestamp!: string;
+  window!: string;
+  usage!: {
+    cpu: string;
+    memory: string;
+  };
+}
+
+export class K8SNode {
+  constructor() {
+    this.metadata = new Metadata();
+    this.status = {
+      capacity: {
+        cpu: '0'
+      },
+      allocatable: {
+        cpu: '0'
+      },
+      conditions: [],
+      addresses: [],
+      daemonEndpoints: {
+        kubeletEndpoint: {}
+      },
+      nodeInfo: {},
+      image: []
+    };
+  }
+  metadata!: Metadata;
+  spec!: any;
+  status!: {
+    capacity: {
+      cpu?: string;
+      'ephemeral-storage'?: string;
+      'hugepages-2Mi'?: string;
+      memory?: string;
+      pods?: string;
+    };
+    allocatable: {
+      cpu?: string;
+      'ephemeral-storage'?: string;
+      'hugepages-2Mi'?: string;
+      memory?: string;
+      pods?: string;
+    };
+    conditions: Condition[];
+    addresses: Address[];
+    daemonEndpoints: {
+      kubeletEndpoint: {
+        Port?: number;
+      };
+    };
+    nodeInfo: {
+      machineID?: string;
+      systemUUID?: string;
+      bootID?: string;
+      kernelVersion?: string;
+      osImage?: string;
+      containerRuntimeVersion?: string;
+      kubeletVersion?: string;
+      kubeProxyVersion?: string;
+      operatingSystem?: string;
+      architecture?: string;
+    };
+    image: Image[];
   };
 }

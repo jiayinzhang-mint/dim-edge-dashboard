@@ -21,11 +21,17 @@ Vue.filter('format', (date: string, fmt: string) =>
 
 // get cpu usage
 Vue.filter('cpu', (v: string) => {
-  return cpuUsage(v);
+  if (v) {
+    return cpuUsage(v);
+  }
+  return 0;
 });
 
 Vue.filter('mem', (v: string) => {
-  return memUsage(v);
+  if (v) {
+    return memUsage(v);
+  }
+  return 0;
 });
 
 new Vue({

@@ -85,10 +85,6 @@ export default class IndexView extends Vue {
         subheader: 'Dev'
       },
       {
-        name: 'Dashboard',
-        route: { path: '/dashboard', query: this.$route.query }
-      },
-      {
         name: 'Deployment',
         route: { path: '/deployment', query: this.$route.query }
       },
@@ -104,12 +100,16 @@ export default class IndexView extends Vue {
         subheader: 'Production'
       },
       {
+        name: 'Dashboard',
+        route: { path: '/dashboard', query: this.$route.query }
+      },
+      {
         name: 'InfluxDB',
         route: { path: '/influxdb', query: this.$route.query }
       },
       {
-        name: 'Node',
-        route: { path: '/node', query: this.$route.query }
+        name: 'EdgeNode',
+        route: { path: '/edgenode', query: this.$route.query }
       }
     ];
   }

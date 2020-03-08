@@ -25,4 +25,4 @@ export default class InfoCard extends Vue {
 }
 </script>
 
-<style scoped></style>
+<style scoped></style>ojb

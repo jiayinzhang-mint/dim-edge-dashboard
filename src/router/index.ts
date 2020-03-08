@@ -13,10 +13,6 @@ const routes = [
     component: () => import('@/views/Index.vue'),
     children: [
       {
-        path: '/dashboard',
-        component: () => import('@/views/service/Service.vue')
-      },
-      {
         path: '/deployment',
         component: () => import('@/views/service/Service.vue')
       },
@@ -37,8 +33,8 @@ const routes = [
         component: () => import('@/views/pod/Info.vue')
       },
       {
-        path: '/node',
-        component: () => import('@/views/service/Service.vue')
+        path: '/dashboard',
+        component: () => import('@/views/dashboard/Dashboard.vue')
       },
       {
         path: '/influxdb',
@@ -47,6 +43,10 @@ const routes = [
       {
         path: '/influxdb/:name',
         component: () => import('@/views/influxdb/Info.vue')
+      },
+      {
+        path: '/edgenode',
+        component: () => import('@/views/dim-edge-node/Node.vue')
       }
     ]
   }
@@ -54,18 +54,6 @@ const routes = [
 
 const router = new VueRouter({
   routes
-});
-
-router.beforeEach((to, from, next) => {
-  if (from.query && !to.query) {
-    if (to.path === from.path) {
-      // console.log('Identical routes detected')
-      return; // This is a no-no via the documentation, but a bug in routing to identical routes strips query params, and this prevents that
-    }
-    next({ path: to.path, query: from.query });
-  }
-
-  next();
 });
 
 export default router;

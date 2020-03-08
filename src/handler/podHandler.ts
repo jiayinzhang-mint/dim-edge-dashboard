@@ -1,5 +1,5 @@
 import BasicHandler from './basicHandler';
-import { Pod, Container } from '@/types/backend';
+import { Pod, Container, Metrics } from '@/types/backend';
 
 export default class PodHandler {
   static async getPodList(namespace: string, serviceName?: string) {
@@ -32,9 +32,9 @@ export default class PodHandler {
         namespace,
         serviceName
       });
-      return Promise.resolve(rsp.items as Pod[]);
+      return Promise.resolve(rsp.items as Metrics[]);
     } catch (err) {
-      return Promise.reject([] as Pod[]);
+      return Promise.reject([] as Metrics[]);
     }
   }
 
@@ -44,9 +44,9 @@ export default class PodHandler {
         namespace,
         name
       });
-      return Promise.resolve(rsp.containers as Container[]);
+      return Promise.resolve(rsp.containers as Metrics[]);
     } catch (err) {
-      return Promise.reject([] as Container[]);
+      return Promise.reject([] as Metrics[]);
     }
   }
 }

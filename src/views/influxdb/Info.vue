@@ -28,7 +28,7 @@
                 <v-row no-gutters>
                   <v-col cols="6">
                     <info-card title="CPU Usage">
-                      {{ item.usage.cpu | cpu }} %
+                      {{ item.usage.cpu | cpu }} m
                     </info-card>
                   </v-col>
                   <v-col cols="6">
