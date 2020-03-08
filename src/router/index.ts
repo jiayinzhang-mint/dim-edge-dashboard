@@ -47,6 +47,10 @@ const routes = [
       {
         path: '/edgenode',
         component: () => import('@/views/dim-edge-node/Node.vue')
+      },
+      {
+        path: '/edgenode/:name',
+        component: () => import('@/views/dim-edge-node/Info.vue')
       }
     ]
   }

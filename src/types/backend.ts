@@ -147,12 +147,6 @@ export class DataPoint {
   y!: number;
 }
 
-export class Metric {
-  dataPoints!: DataPoint[];
-  metricName!: string;
-  aggregation!: string;
-}
-
 export class Container {
   name!: string;
   image!: string;
@@ -161,7 +155,16 @@ export class Container {
   imagePullPolicy!: string;
   ports!: Port[];
   volumeMounts!: Volume[];
-  resources!: any;
+  resources!: {
+    limits: {
+      cpu: string;
+      memory: string;
+    };
+    requests: {
+      cpu: string;
+      memory: string;
+    };
+  };
 }
 
 export interface ContainerStateWaiting {
@@ -403,5 +406,53 @@ export class K8SNode {
       architecture?: string;
     };
     image: Image[];
+  };
+}
+
+export class StatefulSet {
+  constructor() {
+    this.metadata = new Metadata();
+    this.spec = {
+      selector: {
+        matchLabels: {}
+      },
+      template: new Pod(),
+      volumeClaimTemplates: [],
+      updateStrategy: {
+        rollingUpdate: {
+          partition: 0
+        }
+      }
+    };
+    this.status = {};
+  }
+
+  metadata!: Metadata;
+  spec!: {
+    replicas?: number;
+    serviceName?: string;
+    podManagementPolicy?: string;
+    revisionHistoryLimit?: number;
+    selector: {
+      matchLabels: StringMap;
+    };
+    template: Pod;
+    volumeClaimTemplates: VolumeClaim[];
+    updateStrategy: {
+      type?: string;
+      rollingUpdate: {
+        partition: number;
+      };
+    };
+  };
+  status!: {
+    observedGeneration?: number;
+    replicas?: number;
+    readyReplicas?: number;
+    currentReplicas?: number;
+    updatedReplicas?: number;
+    currentRevision?: string;
+    updateRevision?: string;
+    collisionCount?: number;
   };
 }

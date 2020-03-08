@@ -1,59 +1,137 @@
 <template>
   <div>
-    <v-data-table
-      class="transparent"
-      disable-sort
-      disable-filtering
-      :headers="headers"
-      :items="dbPodList"
-    >
-      <template v-slot:item.name="{ item }">
-        {{ item.metadata.name }}
-      </template>
-      <template v-slot:item.namespace="{ item }">
-        {{ item.metadata.namespace }}
-      </template>
+    <v-container fluid>
+      <v-row no-gutters>
+        <v-col cols="3">
+          <info-card title="Replicas">
+            <v-container fluid>
+              <v-row justify="center">
+                <v-progress-circular
+                  :rotate="-90"
+                  :size="150"
+                  :width="4"
+                  :value="readyReplicas"
+                  color="primary"
+                >
+                  <div class="font-weight-black headline white--text">
+                    {{ readyReplicas || 0 }}
+                  </div>
+                  <span class="ml-1 white--text">%</span>
+                </v-progress-circular>
+              </v-row>
+            </v-container>
 
-      <template v-slot:item.created="{ item }">
-        {{ item.metadata.creationTimestamp | format('yyyy-MM-dd hh:mm:ss') }}
-      </template>
-      <template v-slot:item.hostIP="{ item }">
-        {{ item.status.hostIP }}
-      </template>
-      <template v-slot:item.podIP="{ item }">
-        {{ item.status.podIP }}
-      </template>
-      <template v-slot:item.port="{ item }">
-        <v-chip
-          class="mr-2 font-weight-black"
-          v-for="p in item.spec.ports"
-          :key="p.nodePort"
-          small
-        >
-          {{ p.port }} : {{ p.targetPort }} : {{ p.nodePort }}
-        </v-chip>
-      </template>
-      <template v-slot:item.action="{ item }">
-        <v-btn
-          class="mr-1"
-          icon
-          small
-          :to="{ path: `/influxdb/${item.metadata.name}`, query: $route.query }"
-          ><v-icon size="20">mdi-information-outline</v-icon></v-btn
-        >
-      </template>
-    </v-data-table>
+            <v-row no-gutters class="mt-4" justify="center">
+              <v-col cols="6">
+                <v-row no-gutters justify="center">
+                  <v-col cols="12" class="text-center">
+                    <span class="caption text-center">Ready</span>
+                  </v-col>
+                  <v-col cols="12" class="text-center">
+                    <div class="title font-weight-black">
+                      {{ statefulSet.status.readyReplicas }}
+                    </div>
+                  </v-col>
+                </v-row>
+              </v-col>
+              <v-col cols="6">
+                <v-row no-gutters justify="center">
+                  <v-col cols="12" class="text-center">
+                    <span class="caption">All</span>
+                  </v-col>
+                  <v-col cols="12" class="text-center">
+                    <div class="title font-weight-black">
+                      {{ statefulSet.status.replicas }}
+                    </div>
+                  </v-col>
+                </v-row>
+              </v-col>
+            </v-row>
+          </info-card>
+        </v-col>
+        <v-col cols="9">
+          <v-row no-gutters>
+            <v-col cols="4">
+              <info-card title="Observed generation">
+                <div class="title font-weight-black">
+                  {{ statefulSet.status.observedGeneration }}
+                </div>
+              </info-card>
+            </v-col>
+          </v-row>
+        </v-col>
+      </v-row>
+      <v-row no-gutters>
+        <v-col cols="12">
+          <v-toolbar dense class="transparent" flat>
+            <v-toolbar-title class="subtitle-1 font-weight-black"
+              >Pods</v-toolbar-title
+            >
+          </v-toolbar>
+          <v-data-table
+            class="transparent"
+            disable-sort
+            disable-filtering
+            :headers="headers"
+            :items="dbPodList"
+          >
+            <template v-slot:item.name="{ item }">
+              {{ item.metadata.name }}
+            </template>
+            <template v-slot:item.namespace="{ item }">
+              {{ item.metadata.namespace }}
+            </template>
+
+            <template v-slot:item.created="{ item }">
+              {{
+                item.metadata.creationTimestamp | format('yyyy-MM-dd hh:mm:ss')
+              }}
+            </template>
+            <template v-slot:item.hostIP="{ item }">
+              {{ item.status.hostIP }}
+            </template>
+            <template v-slot:item.podIP="{ item }">
+              {{ item.status.podIP }}
+            </template>
+            <template v-slot:item.port="{ item }">
+              <v-chip
+                class="mr-2 font-weight-black"
+                v-for="p in item.spec.ports"
+                :key="p.nodePort"
+                small
+              >
+                {{ p.port }} : {{ p.targetPort }} : {{ p.nodePort }}
+              </v-chip>
+            </template>
+            <template v-slot:item.action="{ item }">
+              <v-btn
+                class="mr-1"
+                icon
+                small
+                :to="{
+                  path: `/influxdb/${item.metadata.name}`,
+                  query: $route.query
+                }"
+                ><v-icon size="20">mdi-information-outline</v-icon></v-btn
+              >
+            </template>
+          </v-data-table>
+        </v-col>
+      </v-row>
+    </v-container>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import { Pod } from '@/types/backend';
+import { Pod, StatefulSet } from '@/types/backend';
 import PodHandler from '@/handler/podHandler';
+import StatefulSetHandler from '@/handler/statefulSetHandler';
 
 @Component
 export default class InfluxDBView extends Vue {
   dbPodList: Pod[] = [];
+  statefulSet: StatefulSet = new StatefulSet();
 
   get namespace() {
     return String(this.$route.query.namespace);
@@ -95,8 +173,23 @@ export default class InfluxDBView extends Vue {
     );
   }
 
+  async getStatefulSet() {
+    this.statefulSet = await StatefulSetHandler.getOneStatefulSet(
+      this.namespace,
+      'dim-edge-influxdb'
+    );
+  }
+
+  get readyReplicas() {
+    return (
+      (100 * (this.statefulSet.status.readyReplicas || 0)) /
+      (this.statefulSet.status.replicas || 1)
+    ).toFixed(2);
+  }
+
   mounted() {
     this.getPodList();
+    this.getStatefulSet();
   }
 }
 </script>

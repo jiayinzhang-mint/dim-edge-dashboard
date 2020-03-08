@@ -11,10 +11,10 @@
                   :size="150"
                   :width="4"
                   :value="cpuLoadPercent"
-                  color="primary"
+                  :color="getLoadProgress(cpuLoadPercent)"
                 >
                   <div class="font-weight-black headline white--text">
-                    {{ cpuLoadPercent }}
+                    {{ cpuLoadPercent || 0 }}
                   </div>
                   <span class="ml-1 white--text">%</span>
                 </v-progress-circular>
@@ -29,7 +29,8 @@
                   </v-col>
                   <v-col cols="12" class="text-center">
                     <div class="title font-weight-black">
-                      {{ metrics.usage.cpu | cpu }} m
+                      {{ metrics.usage.cpu | cpu }}
+                      <span class="caption font-weight-black">m</span>
                     </div>
                   </v-col>
                 </v-row>
@@ -41,7 +42,8 @@
                   </v-col>
                   <v-col cols="12" class="text-center">
                     <div class="title font-weight-black">
-                      {{ minikubeNode.status.allocatable.cpu * 1000 }} m
+                      {{ minikubeNode.status.allocatable.cpu * 1000 }}
+                      <span class="caption font-weight-black">m</span>
                     </div>
                   </v-col>
                 </v-row>
@@ -58,10 +60,10 @@
                   :size="150"
                   :width="4"
                   :value="memoryLoadPercent"
-                  color="primary"
+                  :color="getLoadProgress(memoryLoadPercent)"
                 >
                   <div class="font-weight-black headline white--text">
-                    {{ memoryLoadPercent }}
+                    {{ memoryLoadPercent || 0 }}
                   </div>
                   <span class="ml-1 white--text">%</span>
                 </v-progress-circular>
@@ -75,7 +77,8 @@
                   </v-col>
                   <v-col cols="12" class="text-center">
                     <div class="title font-weight-black">
-                      {{ metrics.usage.memory | mem }} MB
+                      {{ metrics.usage.memory | mem }}
+                      <span class="caption font-weight-black">MB</span>
                     </div>
                   </v-col>
                 </v-row>
@@ -87,13 +90,38 @@
                   </v-col>
                   <v-col cols="12" class="text-center">
                     <div class="title font-weight-black">
-                      {{ minikubeNode.status.allocatable.memory | mem }} MB
+                      {{ minikubeNode.status.allocatable.memory | mem }}
+                      <span class="caption font-weight-black">MB</span>
                     </div>
                   </v-col>
                 </v-row>
               </v-col>
             </v-row>
           </info-card>
+        </v-col>
+      </v-row>
+
+      <v-row no-gutters>
+        <v-toolbar dense class="transparent" flat>
+          <v-toolbar-title class="subtitle-1 font-weight-black"
+            >Conditions</v-toolbar-title
+          >
+        </v-toolbar>
+        <v-col cols="12">
+          <v-data-table
+            class="transparent"
+            disable-sort
+            disable-filtering
+            :headers="conditionHeaders"
+            :items="minikubeNode.status.conditions"
+          >
+            <template v-slot:item.lastHeartbeatTime="{ item }">
+              {{ item.lastHeartbeatTime | format('yyyy-MM-dd hh:mm:ss') }}
+            </template>
+            <template v-slot:item.lastTransitionTime="{ item }">
+              {{ item.lastTransitionTime | format('yyyy-MM-dd hh:mm:ss') }}
+            </template>
+          </v-data-table>
         </v-col>
       </v-row>
     </v-container>
@@ -104,11 +132,13 @@
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import NodeHandler from '@/handler/nodeHandler';
 import { Metrics, K8SNode } from '@/types/backend';
+import { loadProgress } from '@/utils/progress';
 
 @Component
 export default class DashboardView extends Vue {
   metrics: Metrics = new Metrics();
   minikubeNode: K8SNode = new K8SNode();
+  timer = 0;
 
   async getMetrics() {
     this.metrics = await NodeHandler.getOneNodeMetrics('minikube');
@@ -133,9 +163,47 @@ export default class DashboardView extends Vue {
     ).toFixed(2);
   }
 
+  get conditionHeaders() {
+    return [
+      {
+        text: 'Type',
+        value: 'type'
+      },
+      {
+        text: 'Status',
+        value: 'status'
+      },
+      {
+        text: 'Last heartbeat Time',
+        value: 'lastHeartbeatTime'
+      },
+      {
+        text: 'Last transition Time',
+        value: 'lastTransitionTime'
+      },
+      {
+        text: 'Message',
+        value: 'message'
+      }
+    ];
+  }
+
+  getLoadProgress(v: number) {
+    return loadProgress(v);
+  }
+
   async mounted() {
     this.getMetrics();
     this.getNode();
+
+    this.timer = setInterval(() => {
+      this.getMetrics();
+      this.getNode();
+    }, 10000);
+  }
+
+  beforeDestroy() {
+    clearInterval(this.timer);
   }
 }
 </script>
