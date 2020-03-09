@@ -7,7 +7,9 @@ import vuetify from './plugins/vuetify';
 import '@/styles/style.css';
 
 import InfoCard from '@/plugins/info-card/Main.vue';
+import InputDialog from '@/plugins/input-dialog/Main.vue';
 Vue.component('info-card', InfoCard);
+Vue.component('input-dialog', InputDialog);
 
 import DateHelper from '@/utils/dateHelper';
 import { cpuUsage, memUsage } from './utils/convert';

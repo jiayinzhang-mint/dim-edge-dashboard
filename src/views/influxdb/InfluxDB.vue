@@ -67,6 +67,10 @@
             <v-toolbar-title class="subtitle-1 font-weight-black"
               >Pods</v-toolbar-title
             >
+            <v-spacer></v-spacer>
+            <v-btn outlined @click="scaleDialog = true"
+              ><v-icon size="20" class="mr-2">mdi-contrast</v-icon>Scale</v-btn
+            >
           </v-toolbar>
           <v-data-table
             class="transparent"
@@ -119,6 +123,9 @@
         </v-col>
       </v-row>
     </v-container>
+
+    <input-dialog width="400" :open.sync="scaleDialog" title="Scale">
+    </input-dialog>
   </div>
 </template>
 
@@ -132,6 +139,7 @@ import StatefulSetHandler from '@/handler/statefulSetHandler';
 export default class InfluxDBView extends Vue {
   dbPodList: Pod[] = [];
   statefulSet: StatefulSet = new StatefulSet();
+  scaleDialog = false;
 
   get namespace() {
     return String(this.$route.query.namespace);

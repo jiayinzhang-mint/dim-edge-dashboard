@@ -8,10 +8,15 @@
       flat
       height="100%"
     >
-      <v-card-title class="body-2 font-weight-black primary--text">{{
-        title
-      }}</v-card-title>
-      <v-card-text class="white--text"><slot></slot></v-card-text>
+      <v-card-title
+        v-if="title"
+        class="body-2 font-weight-black primary--text"
+        >{{ title }}</v-card-title
+      >
+      <v-layout fill-height v-if="button" align-center justify-center>
+        <slot></slot>
+      </v-layout>
+      <v-card-text v-else class="white--text"><slot></slot></v-card-text>
     </v-card>
   </v-hover>
 </template>
@@ -22,6 +27,7 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 @Component
 export default class InfoCard extends Vue {
   @Prop() title!: string;
+  @Prop() button!: boolean;
 }
 </script>
 
