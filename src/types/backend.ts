@@ -210,6 +210,23 @@ export class Namespace {
   };
 }
 
+export class Scale {
+  constructor() {
+    this.metadata = new Metadata();
+    this.spec = {
+      replicas: 1
+    };
+  }
+  metadata!: Metadata;
+  spec!: {
+    replicas: number;
+  };
+  status?: {
+    replicas: number;
+    selector: string;
+  };
+}
+
 export class Service {
   constructor() {
     this.metadata = new Metadata();

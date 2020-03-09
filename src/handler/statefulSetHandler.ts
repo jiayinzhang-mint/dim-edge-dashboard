@@ -1,5 +1,5 @@
 import BasicHandler from './basicHandler';
-import { StatefulSet } from '@/types/backend';
+import { StatefulSet, Scale } from '@/types/backend';
 
 export default class StatefulSetHandler {
   static async getStatefulSetList(namespace: string, serviceName?: string) {
@@ -23,6 +23,18 @@ export default class StatefulSetHandler {
       return Promise.resolve(rsp as StatefulSet);
     } catch (err) {
       return Promise.reject(new StatefulSet());
+    }
+  }
+
+  static async updateStatefulSetScale(s: Scale) {
+    try {
+      const rsp = await BasicHandler.putRequest(
+        '/api/k8s/statefulset/scale',
+        s
+      );
+      return Promise.resolve(rsp as Scale);
+    } catch (_) {
+      return Promise.reject(new Scale());
     }
   }
 }

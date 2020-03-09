@@ -124,14 +124,34 @@
       </v-row>
     </v-container>
 
-    <input-dialog width="400" :open.sync="scaleDialog" title="Scale">
+    <input-dialog
+      :confirmFunc="scaleStatefulSet"
+      width="400"
+      :open.sync="scaleDialog"
+      title="Scale"
+    >
+      <v-container fluid>
+        <v-text-field
+          background-color="rgba(0,0,0,0.4)"
+          solo
+          dense
+          prepend-icon="mdi-minus"
+          @click:prepend="updateReplicasNum(-1)"
+          @click:append-outer="updateReplicasNum(1)"
+          append-outer-icon="mdi-plus"
+          v-model="targetScale.spec.replicas"
+          flat
+          type="number"
+          label="Replicas"
+        ></v-text-field>
+      </v-container>
     </input-dialog>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import { Pod, StatefulSet } from '@/types/backend';
+import { Pod, StatefulSet, Scale } from '@/types/backend';
 import PodHandler from '@/handler/podHandler';
 import StatefulSetHandler from '@/handler/statefulSetHandler';
 
@@ -140,6 +160,7 @@ export default class InfluxDBView extends Vue {
   dbPodList: Pod[] = [];
   statefulSet: StatefulSet = new StatefulSet();
   scaleDialog = false;
+  targetScale: Scale = new Scale();
 
   get namespace() {
     return String(this.$route.query.namespace);
@@ -179,6 +200,7 @@ export default class InfluxDBView extends Vue {
       this.namespace,
       'dim-edge-influxdb'
     );
+    this.targetScale.spec.replicas = this.dbPodList.length;
   }
 
   async getStatefulSet() {
@@ -186,6 +208,23 @@ export default class InfluxDBView extends Vue {
       this.namespace,
       'dim-edge-influxdb'
     );
+  }
+
+  async scaleStatefulSet() {
+    this.scaleDialog = false;
+    this.targetScale.metadata.namespace = this.namespace;
+    this.targetScale.metadata.name = 'dim-edge-influxdb';
+    await StatefulSetHandler.updateStatefulSetScale(this.targetScale);
+    this.getPodList();
+  }
+
+  updateReplicasNum(v: number) {
+    if (v == -1) {
+      if (this.targetScale.spec.replicas > 1)
+        this.targetScale.spec.replicas -= 1;
+    } else if (v == +1) {
+      this.targetScale.spec.replicas += 1;
+    }
   }
 
   get readyReplicas() {
