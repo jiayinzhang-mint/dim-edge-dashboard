@@ -91,9 +91,6 @@
                 item.metadata.creationTimestamp | format('yyyy-MM-dd hh:mm:ss')
               }}
             </template>
-            <template v-slot:item.hostIP="{ item }">
-              {{ item.status.hostIP }}
-            </template>
             <template v-slot:item.podIP="{ item }">
               {{ item.status.podIP }}
             </template>
@@ -107,8 +104,43 @@
                 {{ p.port }} : {{ p.targetPort }} : {{ p.nodePort }}
               </v-chip>
             </template>
+            <template v-slot:item.phase="{ item }">
+              <v-chip
+                :color="phaseColor(item.status.phase)"
+                small
+                class="font-weight-black"
+              >
+                {{ item.status.phase }}</v-chip
+              >
+            </template>
+            <template v-slot:item.condition="{ item }">
+              <div
+                v-if="
+                  item.status.conditions[0] &&
+                    item.status.conditions[0].status == 'True'
+                "
+              >
+                <v-chip class="font-weight-black" small color="success"
+                  >True</v-chip
+                >
+              </div>
+              <div
+                v-if="
+                  item.status.conditions[0] &&
+                    item.status.conditions[0].status == 'False'
+                "
+              >
+                <v-chip
+                  class="font-weight-black"
+                  small
+                  color="error darken-1"
+                  >{{ item.status.conditions[0].message }}</v-chip
+                >
+              </div>
+            </template>
             <template v-slot:item.action="{ item }">
               <v-btn
+                v-if="item.status.phase == 'Running'"
                 class="mr-1"
                 icon
                 small
@@ -161,6 +193,7 @@ export default class InfluxDBView extends Vue {
   statefulSet: StatefulSet = new StatefulSet();
   scaleDialog = false;
   targetScale: Scale = new Scale();
+  timer = 0;
 
   get namespace() {
     return String(this.$route.query.namespace);
@@ -181,12 +214,16 @@ export default class InfluxDBView extends Vue {
         value: 'created'
       },
       {
-        text: 'Host IP',
-        value: 'hostIP'
-      },
-      {
         text: 'Pod IP',
         value: 'podIP'
+      },
+      {
+        text: 'Phase',
+        value: 'phase'
+      },
+      {
+        text: 'Latest condition',
+        value: 'condition'
       },
       {
         text: 'Actions',
@@ -227,6 +264,20 @@ export default class InfluxDBView extends Vue {
     }
   }
 
+  phaseColor(v: string) {
+    if (v == 'Running') {
+      return 'success';
+    } else if (v == 'Pending') {
+      return 'primary darken-1';
+    } else if (v == 'Succeeded') {
+      return 'grey';
+    } else if (v == 'Failed') {
+      return 'error';
+    } else if (v == 'Unknown') {
+      return 'warning';
+    }
+  }
+
   get readyReplicas() {
     return (
       (100 * (this.statefulSet.status.readyReplicas || 0)) /
@@ -237,6 +288,14 @@ export default class InfluxDBView extends Vue {
   mounted() {
     this.getPodList();
     this.getStatefulSet();
+    this.timer = setInterval(() => {
+      this.getPodList();
+      this.getStatefulSet();
+    }, 10000);
+  }
+
+  beforeDestroy() {
+    clearInterval(this.timer);
   }
 }
 </script>
