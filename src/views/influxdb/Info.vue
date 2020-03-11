@@ -117,7 +117,7 @@
             </v-toolbar-title>
             <v-spacer></v-spacer>
           </v-toolbar>
-          {{ volumeClaimList }}
+          {{ volumeClaim }}
         </v-col>
       </v-row>
     </v-container>
@@ -134,7 +134,7 @@ import { loadProgress } from '@/utils/progress';
 
 @Component
 export default class InfluxDBInfoView extends Vue {
-  volumeClaimList: VolumeClaim[] = [];
+  volumeClaim: VolumeClaim = new VolumeClaim();
   dbPod: Pod = new Pod();
   dbPodMetrics: Metrics[] = [];
   timer = 0;
@@ -145,9 +145,9 @@ export default class InfluxDBInfoView extends Vue {
   memoryUsage = '';
 
   async getVolumeClaimList() {
-    this.volumeClaimList = await VolumeHandler.getVolumeClaimList(
+    this.volumeClaim = await VolumeHandler.getOneVolumeClaim(
       this.namespace,
-      this.name
+      this.dbPod.spec.volumes[0]?.persistentVolumeClaim.claimName
     );
   }
 
@@ -168,6 +168,7 @@ export default class InfluxDBInfoView extends Vue {
         this.namespace,
         this.name
       );
+
       this.cpuUsage = this.dbPodMetrics[0]?.usage?.cpu;
       this.memoryUsage = this.dbPodMetrics[0]?.usage?.memory;
     } catch (_) {
@@ -188,23 +189,29 @@ export default class InfluxDBInfoView extends Vue {
   }
 
   get cpuPercent() {
-    return (
-      (100 * Number(cpuUsage(this.cpuUsage))) /
-      Number(cpuUsage(this.cpuLimit))
-    ).toFixed(2);
+    if (this.cpuLimit && this.cpuUsage) {
+      return (
+        (100 * Number(cpuUsage(this.cpuUsage))) /
+        Number(cpuUsage(this.cpuLimit))
+      ).toFixed(2);
+    }
+    return 0;
   }
 
   get memoryPercent() {
-    return (
-      (100 * Number(memUsage(this.memoryUsage))) /
-      Number(memUsage(this.memoryLimit))
-    ).toFixed(2);
+    if (this.memoryLimit && this.memoryUsage) {
+      return (
+        (100 * Number(memUsage(this.memoryUsage))) /
+        Number(memUsage(this.memoryLimit))
+      ).toFixed(2);
+    } else {
+      return 0;
+    }
   }
 
-  mounted() {
+  async mounted() {
+    await this.getCurrentDbPod();
     this.getVolumeClaimList();
-    this.getCurrentDbPod();
-
     this.getPodMetrics();
     this.timer = setInterval(this.getPodMetrics, 10000);
   }
