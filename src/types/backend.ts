@@ -473,3 +473,31 @@ export class StatefulSet {
     collisionCount?: number;
   };
 }
+
+export class ReplicaSet {
+  constructor() {
+    this.metadata = new Metadata();
+    this.spec = {
+      selector: {
+        matchLabels: {}
+      },
+      template: new Pod()
+    };
+    this.status = {};
+  }
+  metadata!: Metadata;
+  spec!: {
+    replicas?: number;
+    selector: {
+      matchLabels: StringMap;
+    };
+    template: Pod;
+  };
+  status!: {
+    observedGeneration?: number;
+    replicas?: number;
+    readyReplicas?: number;
+    currentReplicas?: number;
+    updatedReplicas?: number;
+  };
+}
