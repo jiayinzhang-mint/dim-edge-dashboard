@@ -1,5 +1,5 @@
 import BasicHandler from './basicHandler';
-import { ReplicaSet } from '@/types/backend';
+import { ReplicaSet, Scale } from '@/types/backend';
 
 export default class ReplicaSetHandler {
   static async getReplicaSetList(namespace: string, serviceName?: string) {

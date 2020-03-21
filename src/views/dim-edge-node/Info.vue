@@ -109,16 +109,6 @@
             </v-col>
           </v-row>
         </v-col>
-
-        <v-col cols="12">
-          <v-toolbar dense flat color="transparent">
-            <v-toolbar-title class="subtitle-1 font-weight-black">
-              Volume
-            </v-toolbar-title>
-            <v-spacer></v-spacer>
-          </v-toolbar>
-          {{ volumeClaimList }}
-        </v-col>
       </v-row>
     </v-container>
   </div>
@@ -134,7 +124,6 @@ import { cpuUsage, memUsage } from '@/utils/convert';
 
 @Component
 export default class InfluxDBInfoView extends Vue {
-  volumeClaimList: VolumeClaim[] = [];
   dbPod: Pod = new Pod();
   dbPodMetrics: any = {};
   timer = 0;
@@ -143,13 +132,6 @@ export default class InfluxDBInfoView extends Vue {
   memoryLimit = '';
   cpuUsage = '';
   memoryUsage = '';
-
-  async getVolumeClaimList() {
-    this.volumeClaimList = await VolumeHandler.getVolumeClaimList(
-      this.namespace,
-      this.dbPod.spec.volumes[0]?.persistentVolumeClaim.claimName
-    );
-  }
 
   async getCurrentDbPod() {
     this.dbPod = await PodHandler.getOnePod(this.namespace, this.name);
@@ -206,7 +188,6 @@ export default class InfluxDBInfoView extends Vue {
   }
 
   mounted() {
-    this.getVolumeClaimList();
     this.getCurrentDbPod();
 
     this.getPodMetrics();

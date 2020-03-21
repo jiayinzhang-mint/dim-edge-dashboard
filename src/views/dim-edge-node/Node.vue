@@ -55,9 +55,9 @@
           >ReplicaSets</v-toolbar-title
         >
         <v-spacer></v-spacer>
-        <!-- <v-btn outlined @click="scaleDialog = true"
+        <v-btn outlined @click="scaleDialog = true"
           ><v-icon size="20" class="mr-2">mdi-contrast</v-icon>Scale</v-btn
-        > -->
+        >
       </v-toolbar>
       <v-row no-gutters>
         <v-col cols="12">
@@ -66,7 +66,7 @@
             disable-sort
             disable-filtering
             :headers="headers"
-            :items="dbPodList"
+            :items="nodePodList"
           >
             <template v-slot:item.name="{ item }">
               {{ item.metadata.name }}
@@ -96,6 +96,40 @@
                 {{ p.port }} : {{ p.targetPort }} : {{ p.nodePort }}
               </v-chip>
             </template>
+            <template v-slot:item.phase="{ item }">
+              <v-chip
+                :color="phaseColor(item.status.phase)"
+                small
+                class="font-weight-black"
+              >
+                {{ item.status.phase }}</v-chip
+              >
+            </template>
+            <template v-slot:item.condition="{ item }">
+              <div
+                v-if="
+                  item.status.conditions[0] &&
+                    item.status.conditions[0].status == 'True'
+                "
+              >
+                <v-chip class="font-weight-black" small color="success"
+                  >True</v-chip
+                >
+              </div>
+              <div
+                v-if="
+                  item.status.conditions[0] &&
+                    item.status.conditions[0].status == 'False'
+                "
+              >
+                <v-chip
+                  class="font-weight-black"
+                  small
+                  color="error darken-1"
+                  >{{ item.status.conditions[0].message }}</v-chip
+                >
+              </div>
+            </template>
             <template v-slot:item.action="{ item }">
               <v-btn
                 class="mr-1"
@@ -112,19 +146,46 @@
         </v-col>
       </v-row>
     </v-container>
+
+    <input-dialog
+      :confirmFunc="scaleReplicaSet"
+      width="400"
+      :open.sync="scaleDialog"
+      title="Scale"
+    >
+      <v-container fluid>
+        <v-text-field
+          background-color="rgba(0,0,0,0.4)"
+          solo
+          dense
+          prepend-icon="mdi-minus"
+          @click:prepend="updateReplicasNum(-1)"
+          @click:append-outer="updateReplicasNum(1)"
+          append-outer-icon="mdi-plus"
+          v-model="targetScale.spec.replicas"
+          flat
+          type="number"
+          label="Replicas"
+        ></v-text-field>
+      </v-container>
+    </input-dialog>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import { Pod, ReplicaSet } from '@/types/backend';
+import { Pod, ReplicaSet, Scale } from '@/types/backend';
 import PodHandler from '@/handler/podHandler';
 import ReplicaSetHandler from '@/handler/replicaSetHandler';
+import DeploymentHandler from '@/handler/deploymentHandler';
 
 @Component
 export default class NodeView extends Vue {
-  dbPodList: Pod[] = [];
+  nodePodList: Pod[] = [];
   replicaSet: ReplicaSet = new ReplicaSet();
+  targetScale: Scale = new Scale();
+  scaleDialog = false;
+  timer = 0;
 
   get namespace() {
     return String(this.$route.query.namespace);
@@ -153,14 +214,45 @@ export default class NodeView extends Vue {
         value: 'podIP'
       },
       {
+        text: 'Phase',
+        value: 'phase'
+      },
+      {
+        text: 'Latest condition',
+        value: 'condition'
+      },
+      {
         text: 'Actions',
         value: 'action'
       }
     ];
   }
 
+  updateReplicasNum(v: number) {
+    if (v == -1) {
+      if (this.targetScale.spec.replicas > 1)
+        this.targetScale.spec.replicas -= 1;
+    } else if (v == +1) {
+      this.targetScale.spec.replicas += 1;
+    }
+  }
+
+  phaseColor(v: string) {
+    if (v == 'Running') {
+      return 'success';
+    } else if (v == 'Pending') {
+      return 'primary darken-1';
+    } else if (v == 'Succeeded') {
+      return 'grey';
+    } else if (v == 'Failed') {
+      return 'error';
+    } else if (v == 'Unknown') {
+      return 'warning';
+    }
+  }
+
   async getPodList() {
-    this.dbPodList = await PodHandler.getPodList(
+    this.nodePodList = await PodHandler.getPodList(
       this.namespace,
       'dim-edge-node'
     );
@@ -171,6 +263,15 @@ export default class NodeView extends Vue {
       (
         await ReplicaSetHandler.getReplicaSetList('default', 'dim-edge-node')
       )[0] || new ReplicaSet();
+    this.targetScale.spec.replicas = this.replicaSet.spec.replicas || 1;
+  }
+
+  async scaleReplicaSet() {
+    this.scaleDialog = false;
+    this.targetScale.metadata.namespace = this.namespace;
+    this.targetScale.metadata.name = 'dim-edge-node';
+    await DeploymentHandler.updateDeploymentScale(this.targetScale);
+    this.getPodList();
   }
 
   get readyReplicas() {
@@ -180,9 +281,18 @@ export default class NodeView extends Vue {
     ).toFixed(2);
   }
 
+  beforeDestroy() {
+    clearInterval(this.timer);
+  }
+
   mounted() {
     this.getPodList();
     this.getReplicaSet();
+
+    this.timer = setInterval(() => {
+      this.getPodList();
+      this.getReplicaSet();
+    }, 10000);
   }
 }
 </script>

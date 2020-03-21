@@ -245,6 +245,7 @@ export default class InfluxDBView extends Vue {
       this.namespace,
       'dim-edge-influxdb'
     );
+    this.targetScale.spec.replicas = this.statefulSet.spec.replicas || 1;
   }
 
   async scaleStatefulSet() {
