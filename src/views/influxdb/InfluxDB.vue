@@ -252,7 +252,13 @@ export default class InfluxDBView extends Vue {
     this.scaleDialog = false;
     this.targetScale.metadata.namespace = this.namespace;
     this.targetScale.metadata.name = 'dim-edge-influxdb';
-    await StatefulSetHandler.updateStatefulSetScale(this.targetScale);
+
+    try {
+      await StatefulSetHandler.updateStatefulSetScale(this.targetScale);
+      this.$snack('Scale succeeded', { color: 'success' });
+    } catch (_) {
+      this.$snack('Scale failed', { color: 'error' });
+    }
     this.getPodList();
   }
 

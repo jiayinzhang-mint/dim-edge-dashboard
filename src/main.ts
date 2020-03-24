@@ -8,8 +8,10 @@ import '@/styles/style.css';
 
 import InfoCard from '@/plugins/info-card/Main.vue';
 import InputDialog from '@/plugins/input-dialog/Main.vue';
+import Snack from '@/plugins/snackbar';
 Vue.component('info-card', InfoCard);
 Vue.component('input-dialog', InputDialog);
+Vue.use(Snack);
 
 import DateHelper from '@/utils/dateHelper';
 import { cpuUsage, memUsage } from './utils/convert';

@@ -219,7 +219,7 @@ export default class InfluxDBMetrics extends Vue {
     try {
       this.dbPod = await PodHandler.getOnePod(this.namespace, this.name);
     } catch (_) {
-      console.log('metrics not available');
+      this.$snack('Pod temporarily unavailable');
     }
 
     this.cpuLimit = this.dbPod.spec.containers[0]?.resources?.limits?.cpu;
@@ -236,7 +236,7 @@ export default class InfluxDBMetrics extends Vue {
       this.cpuUsage = this.dbPodMetrics[0]?.usage?.cpu;
       this.memoryUsage = this.dbPodMetrics[0]?.usage?.memory;
     } catch (_) {
-      console.log('metrics not available');
+      this.$snack('Metrics temporarily unavailable');
     }
   }
 

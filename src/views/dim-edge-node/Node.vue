@@ -270,7 +270,14 @@ export default class NodeView extends Vue {
     this.scaleDialog = false;
     this.targetScale.metadata.namespace = this.namespace;
     this.targetScale.metadata.name = 'dim-edge-node';
-    await DeploymentHandler.updateDeploymentScale(this.targetScale);
+
+    try {
+      await DeploymentHandler.updateDeploymentScale(this.targetScale);
+      this.$snack('Scale succeeded', { color: 'success' });
+    } catch (_) {
+      this.$snack('Scale failed', { color: 'error' });
+    }
+
     this.getPodList();
   }
 
