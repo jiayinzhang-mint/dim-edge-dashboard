@@ -110,7 +110,7 @@
           </v-row>
         </v-col>
 
-        <v-col cols="12">
+        <!-- <v-col cols="12">
           <v-toolbar dense flat color="transparent">
             <v-toolbar-title class="subtitle-1 font-weight-black">
               Volume
@@ -118,6 +118,54 @@
             <v-spacer></v-spacer>
           </v-toolbar>
           {{ volumeClaim }}
+        </v-col> -->
+        <v-col cols="6">
+          <AreaChart
+            title="Recent CPU Percentage"
+            name="influxdb-cpu"
+            unit="%"
+            :data="dbCPUMetricRange"
+          ></AreaChart>
+        </v-col>
+        <v-col cols="6">
+          <AreaChart
+            title="Recent Memory Percentage"
+            name="influxdb-mem"
+            unit="%"
+            :data="dbMemMetricRange"
+          ></AreaChart>
+        </v-col>
+        <v-col cols="6">
+          <AreaChart
+            title="Recent FS Usage"
+            name="influxdb-fs"
+            unit="MB"
+            :data="dbFsMetricRange"
+          ></AreaChart>
+        </v-col>
+        <v-col cols="6">
+          <AreaChart
+            title="Recent Thread Usage"
+            name="influxdb-thread"
+            unit=""
+            :data="dbThreadMetricRange"
+          ></AreaChart>
+        </v-col>
+        <v-col cols="6">
+          <AreaChart
+            title="Recent Network Transmit"
+            name="influxdb-network-transmit"
+            unit="k"
+            :data="dbNetworkTransmitRange"
+          ></AreaChart>
+        </v-col>
+        <v-col cols="6">
+          <AreaChart
+            title="Recent Network Receive"
+            name="influxdb-network-receive"
+            unit="k"
+            :data="dbNetworkReceiveRange"
+          ></AreaChart>
         </v-col>
       </v-row>
     </v-container>
@@ -131,12 +179,28 @@ import { Pod, VolumeClaim, Metrics } from '@/types/backend';
 import PodHandler from '@/handler/podHandler';
 import { cpuUsage, memUsage } from '@/utils/convert';
 import { loadProgress } from '@/utils/progress';
+import PromHandler from '@/handler/promHandler';
+import { Query } from '@/types/prom';
 
-@Component
+import AreaChart from '@/components/AreaChart.vue';
+
+@Component({
+  components: {
+    AreaChart
+  }
+})
 export default class InfluxDBInfoView extends Vue {
   volumeClaim: VolumeClaim = new VolumeClaim();
   dbPod: Pod = new Pod();
   dbPodMetrics: Metrics[] = [];
+
+  dbCPUMetricRange: (string | number)[][] = [];
+  dbMemMetricRange: (string | number)[][] = [];
+  dbFsMetricRange: (string | number)[][] = [];
+  dbThreadMetricRange: (string | number)[][] = [];
+  dbNetworkTransmitRange: (string | number)[][] = [];
+  dbNetworkReceiveRange: (string | number)[][] = [];
+
   timer = 0;
 
   cpuLimit = '';
@@ -176,6 +240,32 @@ export default class InfluxDBInfoView extends Vue {
     }
   }
 
+  async getMetricRange() {
+    const q = new Query();
+    q.container = 'dim-edge-influxdb';
+    q.pod = this.dbPod.metadata.name;
+    q.duration = '5m';
+
+    this.dbCPUMetricRange = (
+      await PromHandler.getCPUPercentageRange(q)
+    )[0].values.map((e) => [e[0], Number(e[1]) * 100]);
+    this.dbMemMetricRange = (
+      await PromHandler.getMemUsageRange(q)
+    )[0].values.map((e) => [e[0], (Number(e[1]) / 1000000 / 50) * 100]);
+    this.dbFsMetricRange = (
+      await PromHandler.getFsUsageRange(q)
+    )[0].values.map((e) => [e[0], Number(e[1]) / 1000000]);
+    this.dbThreadMetricRange = (
+      await PromHandler.getThreadUsageRange(q)
+    )[0].values;
+    this.dbNetworkTransmitRange = (
+      await PromHandler.getNetworkTransmitRange(q)
+    )[0].values.map((e) => [e[0], Number(e[1]) / 1000]);
+    this.dbNetworkReceiveRange = (
+      await PromHandler.getNetworkReceiveRange(q)
+    )[0].values.map((e) => [e[0], Number(e[1]) / 1000]);
+  }
+
   getLoadProgress(v: number) {
     return loadProgress(v);
   }
@@ -213,7 +303,11 @@ export default class InfluxDBInfoView extends Vue {
     await this.getCurrentDbPod();
     this.getVolumeClaimList();
     this.getPodMetrics();
-    this.timer = setInterval(this.getPodMetrics, 10000);
+    this.getMetricRange();
+    this.timer = setInterval(() => {
+      this.getPodMetrics();
+      this.getMetricRange();
+    }, 10000);
   }
 
   beforeDestroy() {

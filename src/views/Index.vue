@@ -49,6 +49,20 @@
           </v-breadcrumbs-item>
         </template>
       </v-breadcrumbs>
+
+      <v-spacer></v-spacer>
+      <v-menu offset-y>
+        <template v-slot:activator="{ on }">
+          <v-avatar v-on="on" color="primary darken-1" size="30"
+            ><span class="caption font-weight-black">M</span></v-avatar
+          >
+        </template>
+        <v-list dense>
+          <v-list-item v-for="(item, i) in userMenu" :key="`me-${i}`">
+            <v-list-item-title>{{ item.title }}</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
     </v-app-bar>
     <v-content>
       <router-view></router-view>
@@ -110,6 +124,14 @@ export default class IndexView extends Vue {
       {
         name: 'EdgeNode',
         route: { path: '/edgenode', query: this.$route.query }
+      }
+    ];
+  }
+
+  get userMenu() {
+    return [
+      {
+        title: 'Log Out'
       }
     ];
   }

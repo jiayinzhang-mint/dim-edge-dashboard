@@ -107,6 +107,57 @@
                 </v-row>
               </info-card>
             </v-col>
+
+            <v-col cols="6"> </v-col>
+
+            <v-col cols="6">
+              <AreaChart
+                title="Recent CPU Percentage"
+                name="node-cpu"
+                unit="%"
+                :data="nodeCPUMetricRange"
+              ></AreaChart>
+            </v-col>
+            <v-col cols="6">
+              <AreaChart
+                title="Recent Memory Percentage"
+                name="node-mem"
+                unit="%"
+                :data="nodeMemMetricRange"
+              ></AreaChart>
+            </v-col>
+            <v-col cols="6">
+              <AreaChart
+                title="Recent FS Usage"
+                name="node-fs"
+                unit="MB"
+                :data="nodeFsMetricRange"
+              ></AreaChart>
+            </v-col>
+            <v-col cols="6">
+              <AreaChart
+                title="Recent Thread Usage"
+                name="node-thread"
+                unit=""
+                :data="nodeThreadMetricRange"
+              ></AreaChart>
+            </v-col>
+            <v-col cols="6">
+              <AreaChart
+                title="Recent Network Transmit"
+                name="node-network-transmit"
+                unit="k"
+                :data="nodeNetworkTransmitRange"
+              ></AreaChart>
+            </v-col>
+            <v-col cols="6">
+              <AreaChart
+                title="Recent Network Receive"
+                name="node-network-receive"
+                unit="k"
+                :data="nodeNetworkReceiveRange"
+              ></AreaChart>
+            </v-col>
           </v-row>
         </v-col>
       </v-row>
@@ -121,8 +172,14 @@ import { Pod, VolumeClaim } from '@/types/backend';
 import PodHandler from '@/handler/podHandler';
 import { loadProgress } from '@/utils/progress';
 import { cpuUsage, memUsage } from '@/utils/convert';
+import PromHandler from '@/handler/promHandler';
+import { Query } from '@/types/prom';
 
-@Component
+import AreaChart from '@/components/AreaChart.vue';
+
+@Component({
+  components: { AreaChart }
+})
 export default class InfluxDBInfoView extends Vue {
   dbPod: Pod = new Pod();
   dbPodMetrics: any = {};
@@ -132,6 +189,13 @@ export default class InfluxDBInfoView extends Vue {
   memoryLimit = '';
   cpuUsage = '';
   memoryUsage = '';
+
+  nodeCPUMetricRange: (string | number)[][] = [];
+  nodeMemMetricRange: (string | number)[][] = [];
+  nodeFsMetricRange: (string | number)[][] = [];
+  nodeThreadMetricRange: (string | number)[][] = [];
+  nodeNetworkTransmitRange: (string | number)[][] = [];
+  nodeNetworkReceiveRange: (string | number)[][] = [];
 
   async getCurrentDbPod() {
     this.dbPod = await PodHandler.getOnePod(this.namespace, this.name);
@@ -149,6 +213,30 @@ export default class InfluxDBInfoView extends Vue {
 
       this.cpuUsage = this.dbPodMetrics[0]?.usage?.cpu;
       this.memoryUsage = this.dbPodMetrics[0]?.usage?.memory;
+
+      const q = new Query();
+      q.container = 'dim-edge-node';
+      q.pod = this.dbPod.metadata.name;
+      q.duration = '5m';
+
+      this.nodeCPUMetricRange = (
+        await PromHandler.getCPUPercentageRange(q)
+      )[0].values.map((e) => [e[0], Number(e[1]) * 100]);
+      this.nodeMemMetricRange = (
+        await PromHandler.getMemUsageRange(q)
+      )[0].values.map((e) => [e[0], (Number(e[1]) / 1000000 / 50) * 100]);
+      this.nodeFsMetricRange = (
+        await PromHandler.getFsUsageRange(q)
+      )[0].values.map((e) => [e[0], Number(e[1]) / 1000000]);
+      this.nodeThreadMetricRange = (
+        await PromHandler.getThreadUsageRange(q)
+      )[0].values;
+      this.nodeNetworkTransmitRange = (
+        await PromHandler.getNetworkTransmitRange(q)
+      )[0].values.map((e) => [e[0], Number(e[1]) / 1000]);
+      this.nodeNetworkReceiveRange = (
+        await PromHandler.getNetworkReceiveRange(q)
+      )[0].values.map((e) => [e[0], Number(e[1]) / 1000]);
     } catch (_) {
       console.log('metrics not available');
     }
@@ -187,8 +275,8 @@ export default class InfluxDBInfoView extends Vue {
     }
   }
 
-  mounted() {
-    this.getCurrentDbPod();
+  async mounted() {
+    await this.getCurrentDbPod();
 
     this.getPodMetrics();
     this.timer = setInterval(this.getPodMetrics, 10000);
