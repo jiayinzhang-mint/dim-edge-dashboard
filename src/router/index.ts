@@ -42,7 +42,17 @@ const routes = [
       },
       {
         path: '/influxdb/:name',
-        component: () => import('@/views/influxdb/Info.vue')
+        component: () => import('@/views/influxdb/Info.vue'),
+        children: [
+          {
+            path: '/influxdb/:name/metrics',
+            component: () => import('@/views/influxdb/mods/Metrics.vue')
+          },
+          {
+            path: '/influxdb/:name/query',
+            component: () => import('@/views/influxdb/mods/Query.vue')
+          }
+        ]
       },
       {
         path: '/edgenode',

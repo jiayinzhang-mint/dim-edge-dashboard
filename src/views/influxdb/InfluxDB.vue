@@ -145,7 +145,7 @@
                 icon
                 small
                 :to="{
-                  path: `/influxdb/${item.metadata.name}`,
+                  path: `/influxdb/${item.metadata.name}/metrics`,
                   query: $route.query
                 }"
                 ><v-icon size="20">mdi-information-outline</v-icon></v-btn
