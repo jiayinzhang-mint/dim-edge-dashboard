@@ -1,18 +1,24 @@
 <template>
   <div>
-    <v-container fluid>
+    <v-container fluid v-if="!canSetup">
       <v-row dense>
         <v-col cols="12">
-          <v-row no-gutters>
-            <v-col cols="3">
-              <info-card title="Setup">
-                <v-container fluid>
-                  {{ setup }}
-                </v-container>
-              </info-card>
-            </v-col>
-          </v-row>
+          <v-row no-gutters> </v-row>
         </v-col>
+      </v-row>
+    </v-container>
+    <v-container v-else>
+      <v-row style="height:calc(100vh - 96px)" justify="center" align="center">
+        <v-card class="transparent" flat>
+          <v-row justify="center">
+            <div class="display-2 font-weight-thin">
+              😤 This InfluxDB has not been setuped
+            </div>
+          </v-row>
+          <v-row justify="center" class="mt-10">
+            <v-btn outlined rounded>Setup Now</v-btn>
+          </v-row>
+        </v-card>
       </v-row>
     </v-container>
   </div>
@@ -25,10 +31,10 @@ import InfluxDBHandler from '@/handler/influxdbHandler';
 
 @Component
 export default class InfluxDBQuery extends Vue {
-  setup = false;
+  canSetup = false;
 
   async checkSetup() {
-    this.setup = await InfluxDBHandler.checkSetup();
+    this.canSetup = await InfluxDBHandler.checkSetup();
   }
 
   mounted() {
