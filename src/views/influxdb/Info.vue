@@ -3,7 +3,7 @@
     <v-toolbar
       class="acrylic"
       width="100%"
-      style="position:fixed; z-index:8"
+      style="position: fixed; z-index: 8;"
       dense
       flat
     >
@@ -13,13 +13,13 @@
           :key="item.name"
           :to="{
             path: `/influxdb/${$route.params.name}/${item.path}`,
-            query: $route.query
+            query: $route.query,
           }"
           >{{ item.name }}</v-tab
         >
       </v-tabs>
     </v-toolbar>
-    <div style="padding-top:48px">
+    <div style="padding-top: 48px;">
       <router-view></router-view>
     </div>
   </div>
@@ -29,18 +29,18 @@
 import { Component, Prop, Vue } from 'vue-property-decorator';
 
 @Component({
-  components: {}
+  components: {},
 })
 export default class InfluxDBInfo extends Vue {
   routeList = [
     {
       path: 'metrics',
-      name: 'Metrics'
+      name: 'Metrics',
     },
     {
       path: 'query',
-      name: 'Query'
-    }
+      name: 'Query',
+    },
   ];
 }
 </script>

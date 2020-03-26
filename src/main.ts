@@ -8,9 +8,12 @@ import '@/styles/style.css';
 
 import InfoCard from '@/plugins/info-card/Main.vue';
 import InputDialog from '@/plugins/input-dialog/Main.vue';
+import DimForm from '@/plugins/dim-form/Main.vue';
 import Snack from '@/plugins/snackbar';
+
 Vue.component('info-card', InfoCard);
 Vue.component('input-dialog', InputDialog);
+Vue.component('dim-form', DimForm);
 Vue.use(Snack);
 
 import DateHelper from '@/utils/dateHelper';
@@ -42,5 +45,5 @@ new Vue({
   router,
   store,
   vuetify,
-  render: (h) => h(App)
+  render: (h) => h(App),
 }).$mount('#app');

@@ -9,4 +9,14 @@ export default class InfluxDBHandler {
 
     return rsp.setup as boolean;
   }
+
+  static async setup(s: any) {
+    const rsp = await BasicHandler.postRequest(
+      '/api/edgenode/influxdb/setup',
+      s
+    );
+
+    if (rsp.msg === 'success') return Promise.resolve();
+    return Promise.reject();
+  }
 }

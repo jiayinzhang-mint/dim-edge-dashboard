@@ -109,7 +109,7 @@
               <div
                 v-if="
                   item.status.conditions[0] &&
-                    item.status.conditions[0].status == 'True'
+                  item.status.conditions[0].status == 'True'
                 "
               >
                 <v-chip class="font-weight-black" small color="success"
@@ -119,7 +119,7 @@
               <div
                 v-if="
                   item.status.conditions[0] &&
-                    item.status.conditions[0].status == 'False'
+                  item.status.conditions[0].status == 'False'
                 "
               >
                 <v-chip
@@ -137,7 +137,7 @@
                 small
                 :to="{
                   path: `/edgenode/${item.metadata.name}`,
-                  query: $route.query
+                  query: $route.query,
                 }"
                 ><v-icon size="20">mdi-information-outline</v-icon></v-btn
               >
@@ -195,36 +195,36 @@ export default class NodeView extends Vue {
     return [
       {
         text: 'Name',
-        value: 'name'
+        value: 'name',
       },
       {
         text: 'Namespace',
-        value: 'namespace'
+        value: 'namespace',
       },
       {
         text: 'Created',
-        value: 'created'
+        value: 'created',
       },
       {
         text: 'Host IP',
-        value: 'hostIP'
+        value: 'hostIP',
       },
       {
         text: 'Pod IP',
-        value: 'podIP'
+        value: 'podIP',
       },
       {
         text: 'Phase',
-        value: 'phase'
+        value: 'phase',
       },
       {
         text: 'Latest condition',
-        value: 'condition'
+        value: 'condition',
       },
       {
         text: 'Actions',
-        value: 'action'
-      }
+        value: 'action',
+      },
     ];
   }
 
