@@ -10,8 +10,15 @@
         <slot></slot>
         <v-container class="pt-0" fluid>
           <v-row justify="center">
-            <v-btn rounded outlined @click="confirmFunc()">Ok</v-btn>
-            <v-btn rounded class="ml-3" text @click="openShow = false"
+            <v-btn rounded outlined @click="confirmFunc()">{{
+              this.okText || `Ok`
+            }}</v-btn>
+            <v-btn
+              v-if="!noExit"
+              rounded
+              class="ml-3"
+              text
+              @click="openShow = false"
               >Cancel</v-btn
             >
           </v-row>
@@ -31,6 +38,8 @@ export default class InputDialog extends Vue {
   @Prop() color!: string;
   @Prop() width!: number;
   @Prop() title!: string;
+  @Prop() noExit!: boolean;
+  @Prop() okText?: string;
   @Prop() confirmFunc!: () => {};
 
   get openShow() {

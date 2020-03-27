@@ -7,7 +7,7 @@ Vue.use(Vuetify);
 export default new Vuetify({
   theme: {
     options: {
-      customProperties: true
+      customProperties: true,
     },
     dark: true,
     themes: {
@@ -18,8 +18,8 @@ export default new Vuetify({
         error: '#FF5252',
         info: '#2196F3',
         success: colors.green.darken2,
-        warning: colors.yellow.darken1
-      }
-    }
-  }
+        warning: colors.yellow.darken1,
+      },
+    },
+  },
 });

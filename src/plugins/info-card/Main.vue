@@ -1,7 +1,7 @@
 <template>
   <v-hover v-slot:default="{ hover }">
     <v-card
-      class="transparent"
+      class="info-card"
       :elevation="hover ? 12 : 0"
       ripple
       outlined
@@ -31,4 +31,8 @@ export default class InfoCard extends Vue {
 }
 </script>
 
-<style scoped></style>ojb
+<style scoped>
+.info-card {
+  background: transparent;
+}
+</style>

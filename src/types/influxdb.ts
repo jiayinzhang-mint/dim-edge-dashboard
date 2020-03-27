@@ -5,3 +5,23 @@ export class Setup {
   bucket!: string;
   retentionPeriodHrs!: number;
 }
+
+export class SignIn {
+  username!: string;
+  password!: string;
+}
+
+export class RetentionRules {
+  type!: string;
+  everySeconds!: number;
+}
+
+export class Bucket {
+  id!: string;
+  type!: string;
+  name!: string;
+  description!: string;
+  createdAt!: string;
+  updatedAt!: string;
+  retentionRules?: RetentionRules[];
+}
