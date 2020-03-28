@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-container fluid>
-      <v-row no-gutters>
+      <v-row dense>
         <v-col cols="3">
           <info-card title="CPU Usage">
             <v-container fluid>
@@ -167,24 +167,24 @@ export default class DashboardView extends Vue {
     return [
       {
         text: 'Type',
-        value: 'type'
+        value: 'type',
       },
       {
         text: 'Status',
-        value: 'status'
+        value: 'status',
       },
       {
         text: 'Last heartbeat Time',
-        value: 'lastHeartbeatTime'
+        value: 'lastHeartbeatTime',
       },
       {
         text: 'Last transition Time',
-        value: 'lastTransitionTime'
+        value: 'lastTransitionTime',
       },
       {
         text: 'Message',
-        value: 'message'
-      }
+        value: 'message',
+      },
     ];
   }
 

@@ -3,7 +3,7 @@
     <v-container fluid>
       <v-row dense>
         <v-col cols="12">
-          <v-row no-gutters>
+          <v-row dense>
             <v-col cols="3">
               <info-card title="CPU Usage">
                 <v-row dense>
@@ -178,7 +178,7 @@ import { Query } from '@/types/prom';
 import AreaChart from '@/components/AreaChart.vue';
 
 @Component({
-  components: { AreaChart }
+  components: { AreaChart },
 })
 export default class InfluxDBInfoView extends Vue {
   dbPod: Pod = new Pod();

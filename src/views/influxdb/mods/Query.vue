@@ -14,7 +14,12 @@
               v-for="(item, i) in bucketList"
               :key="`bucket-${i}`"
             >
-              <info-card :title="item.name" flat color="transparent">
+              <info-card
+                @click="showBucketInfo(item)"
+                :title="item.name"
+                flat
+                color="transparent"
+              >
                 <slot>
                   <div>{{ item.type }}</div>
                   <div>{{ item.createdAt | format('MM-dd hh:mm:ss') }}</div>
@@ -99,6 +104,12 @@
         </v-form>
       </v-container>
     </input-dialog>
+
+    <v-dialog width="400" v-model="bucketInfoDialog">
+      <v-card>
+        <v-container fluid>{{ bucket }} </v-container>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -120,6 +131,8 @@ export default class InfluxDBQuery extends Vue {
   shouldSignIn = false;
 
   bucketList: Bucket[] = [];
+  bucket = new Bucket();
+  bucketInfoDialog = false;
 
   query = '';
 
@@ -148,6 +161,7 @@ export default class InfluxDBQuery extends Vue {
         await InfluxDBHandler.signIn(this.signInParams);
         this.$snack('Sign in succeeded', { color: 'success' });
         this.shouldSignIn = false;
+        this.getBucketList();
       } catch (_) {
         this.$snack('Sign in failed', { color: 'error' });
       }
@@ -172,6 +186,11 @@ export default class InfluxDBQuery extends Vue {
     } catch (_) {
       this.$snack('Get buckets failed', { color: 'error' });
     }
+  }
+
+  async showBucketInfo(b: Bucket) {
+    this.bucketInfoDialog = true;
+    this.bucket = b;
   }
 
   get setupFormContent() {

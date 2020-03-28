@@ -69,4 +69,12 @@ export default class InfluxDBHandler {
     if (rsp.msg === 'success') return Promise.resolve(rsp.bucket as Bucket[]);
     return Promise.reject();
   }
+
+  static async getBucket(bucketID: string) {
+    const rsp = await BasicHandler.getRequest('/api/edgenode/influxdb/bucket', {
+      bucketID,
+    });
+    if (rsp.msg === 'success') return Promise.resolve(rsp.bucket as Bucket);
+    return Promise.reject();
+  }
 }

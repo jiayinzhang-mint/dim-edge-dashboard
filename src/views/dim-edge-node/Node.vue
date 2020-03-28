@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-container fluid>
-      <v-row no-gutters>
+      <v-row dense>
         <v-col cols="3">
           <info-card title="Replicas">
             <v-container fluid>

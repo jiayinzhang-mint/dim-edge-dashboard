@@ -1,6 +1,7 @@
 <template>
   <v-hover v-slot:default="{ hover }">
     <v-card
+      @click="$emit('click')"
       class="info-card"
       :elevation="hover ? 12 : 0"
       ripple
