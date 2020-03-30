@@ -141,11 +141,11 @@ export default class DashboardView extends Vue {
   timer = 0;
 
   async getMetrics() {
-    this.metrics = await NodeHandler.getOneNodeMetrics('m01');
+    this.metrics = await NodeHandler.getOneNodeMetrics('minikube');
   }
 
   async getNode() {
-    this.minikubeNode = await NodeHandler.getOneNode('m01');
+    this.minikubeNode = await NodeHandler.getOneNode('minikube');
   }
 
   get cpuLoadPercent() {

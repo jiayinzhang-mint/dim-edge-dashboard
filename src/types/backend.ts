@@ -214,7 +214,7 @@ export class Scale {
   constructor() {
     this.metadata = new Metadata();
     this.spec = {
-      replicas: 1
+      replicas: 1,
     };
   }
   metadata!: Metadata;
@@ -236,10 +236,10 @@ export class Service {
       clusterIP: '',
       type: '',
       sessionAffinity: '',
-      externalTrafficPolicy: ''
+      externalTrafficPolicy: '',
     };
     this.status = {
-      loadBalancer: []
+      loadBalancer: [],
     };
   }
   metadata!: Metadata;
@@ -274,12 +274,12 @@ export class Pod {
       priority: 0,
       enableServiceLinks: false,
       securityContext: {},
-      tolerations: []
+      tolerations: [],
     };
     this.status = {
       conditions: [],
       podIPs: [],
-      containerStatuses: []
+      containerStatuses: [],
     };
   }
   metadata!: Metadata;
@@ -319,14 +319,14 @@ export class VolumeClaim {
       accessModes: [],
       resource: {
         requests: {
-          storage: ''
-        }
-      }
+          storage: '',
+        },
+      },
     };
     this.status = {
       capacity: {
-        storage: ''
-      }
+        storage: '',
+      },
     };
   }
   metadata!: Metadata;
@@ -354,7 +354,7 @@ export class Metrics {
   constructor() {
     this.usage = {
       cpu: '',
-      memory: ''
+      memory: '',
     };
   }
   name?: string;
@@ -372,18 +372,18 @@ export class K8SNode {
     this.metadata = new Metadata();
     this.status = {
       capacity: {
-        cpu: '0'
+        cpu: '0',
       },
       allocatable: {
-        cpu: '0'
+        cpu: '0',
       },
       conditions: [],
       addresses: [],
       daemonEndpoints: {
-        kubeletEndpoint: {}
+        kubeletEndpoint: {},
       },
       nodeInfo: {},
-      image: []
+      image: [],
     };
   }
   metadata!: Metadata;
@@ -431,15 +431,15 @@ export class StatefulSet {
     this.metadata = new Metadata();
     this.spec = {
       selector: {
-        matchLabels: {}
+        matchLabels: {},
       },
       template: new Pod(),
       volumeClaimTemplates: [],
       updateStrategy: {
         rollingUpdate: {
-          partition: 0
-        }
-      }
+          partition: 0,
+        },
+      },
     };
     this.status = {};
   }
@@ -479,9 +479,9 @@ export class ReplicaSet {
     this.metadata = new Metadata();
     this.spec = {
       selector: {
-        matchLabels: {}
+        matchLabels: {},
       },
-      template: new Pod()
+      template: new Pod(),
     };
     this.status = {};
   }

@@ -202,7 +202,7 @@ export default class InfluxDBQuery extends Vue {
   }
 
   async mounted() {
-    this.checkSetup();
+    await this.checkSetup();
 
     if (!this.canSetup) {
       // check sign in
