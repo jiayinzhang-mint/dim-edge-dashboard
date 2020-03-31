@@ -41,3 +41,23 @@ export class QueryMetricRes {
   metric!: Metric;
   values!: (string | number)[][];
 }
+
+export class Alert {
+  constructor() {
+    this.Annotations = {};
+    this.Labels = {};
+  }
+  activeAt!: string;
+  Annotations!: {
+    message?: string;
+  };
+  Labels!: {
+    alertnam?: string;
+    job?: string;
+    namespace?: string;
+    service?: string;
+    severity?: string;
+  };
+  State!: string;
+  Value!: string;
+}

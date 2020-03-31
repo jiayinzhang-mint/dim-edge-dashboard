@@ -9,6 +9,7 @@
               <v-toolbar-title class="subtitle-1 font-weight-black"
                 >Buckets</v-toolbar-title
               >
+              <v-spacer></v-spacer>
             </v-toolbar>
             <v-col
               cols="12"
@@ -65,7 +66,11 @@
             </v-toolbar-title>
           </v-toolbar>
           <v-container fluid>
-            {{ record }}
+            <v-card flat color="blue-grey darken-4">
+              <v-container fluid>
+                <pre>{{ recordFormated }}</pre>
+              </v-container>
+            </v-card>
           </v-container>
         </v-col>
       </v-row>
@@ -132,9 +137,11 @@
       </v-container>
     </input-dialog>
 
-    <v-dialog width="400" v-model="bucketInfoDialog">
+    <v-dialog width="600" v-model="bucketInfoDialog">
       <v-card>
-        <v-container fluid>{{ bucket }} </v-container>
+        <v-container fluid>
+          <pre>{{ bucket }}</pre>
+        </v-container>
       </v-card>
     </v-dialog>
   </div>
@@ -161,8 +168,14 @@ export default class InfluxDBQuery extends Vue {
   bucket = new Bucket();
   bucketInfoDialog = false;
 
-  query = '';
-  org = '';
+  query = `from(bucket: "INSDIM")
+		|> range(start: -10h)
+		|> filter(fn: (r)=>
+			r._field == "cpu" and
+			r._measurement == "system-metrics" and
+			r.hostname == "hal9000"
+		)`;
+  org = 'INSDIM';
   record: Record[] = [];
 
   timer = 0;
@@ -216,7 +229,7 @@ export default class InfluxDBQuery extends Vue {
         size: 100,
       });
     } catch (_) {
-      this.$snack('Get buckets failed', { color: 'error' });
+      this.$snack('Get buckets', { color: 'error' });
     }
   }
 
@@ -226,10 +239,15 @@ export default class InfluxDBQuery extends Vue {
   }
 
   async queryData() {
-    this.record = await InfluxDBHandler.queryData({
-      queryString: this.query,
-      org: this.org,
-    });
+    try {
+      this.record = await InfluxDBHandler.queryData({
+        queryString: this.query,
+        org: this.org,
+      });
+      this.$snack('Query succeeded', { color: 'success' });
+    } catch (_) {
+      this.$snack('Query failed', { color: 'error' });
+    }
   }
 
   get setupFormContent() {
@@ -238,6 +256,10 @@ export default class InfluxDBQuery extends Vue {
 
   get signInFormContent() {
     return signInForm;
+  }
+
+  get recordFormated() {
+    return JSON.stringify(this.record, null, 2);
   }
 
   beforeDestroy() {

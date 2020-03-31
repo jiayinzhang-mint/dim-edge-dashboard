@@ -6,7 +6,7 @@ Vue.use(VueRouter);
 const routes = [
   {
     path: '/',
-    component: () => import('@/views/Home.vue')
+    component: () => import('@/views/Home.vue'),
   },
   {
     path: '/index',
@@ -14,31 +14,35 @@ const routes = [
     children: [
       {
         path: '/deployment',
-        component: () => import('@/views/service/Service.vue')
+        component: () => import('@/views/service/Service.vue'),
       },
       {
         path: '/service',
-        component: () => import('@/views/service/Service.vue')
+        component: () => import('@/views/service/Service.vue'),
       },
       {
         path: '/service/:name',
-        component: () => import('@/views/service/Info.vue')
+        component: () => import('@/views/service/Info.vue'),
       },
       {
         path: '/pod',
-        component: () => import('@/views/pod/Pod.vue')
+        component: () => import('@/views/pod/Pod.vue'),
       },
       {
         path: '/pod/:name',
-        component: () => import('@/views/pod/Info.vue')
+        component: () => import('@/views/pod/Info.vue'),
       },
       {
         path: '/dashboard',
-        component: () => import('@/views/dashboard/Dashboard.vue')
+        component: () => import('@/views/dashboard/Dashboard.vue'),
+      },
+      {
+        path: '/alert',
+        component: () => import('@/views/alert/Alert.vue'),
       },
       {
         path: '/influxdb',
-        component: () => import('@/views/influxdb/InfluxDB.vue')
+        component: () => import('@/views/influxdb/InfluxDB.vue'),
       },
       {
         path: '/influxdb/:name',
@@ -46,28 +50,28 @@ const routes = [
         children: [
           {
             path: '/influxdb/:name/metrics',
-            component: () => import('@/views/influxdb/mods/Metrics.vue')
+            component: () => import('@/views/influxdb/mods/Metrics.vue'),
           },
           {
             path: '/influxdb/:name/query',
-            component: () => import('@/views/influxdb/mods/Query.vue')
-          }
-        ]
+            component: () => import('@/views/influxdb/mods/Query.vue'),
+          },
+        ],
       },
       {
         path: '/edgenode',
-        component: () => import('@/views/dim-edge-node/Node.vue')
+        component: () => import('@/views/dim-edge-node/Node.vue'),
       },
       {
         path: '/edgenode/:name',
-        component: () => import('@/views/dim-edge-node/Info.vue')
-      }
-    ]
-  }
+        component: () => import('@/views/dim-edge-node/Info.vue'),
+      },
+    ],
+  },
 ];
 
 const router = new VueRouter({
-  routes
+  routes,
 });
 
 export default router;

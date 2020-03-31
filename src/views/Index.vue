@@ -89,50 +89,54 @@ export default class IndexView extends Vue {
   updateCurrentNamespace(v: string) {
     this.$router.push({
       path: this.$route.path,
-      query: { ...this.$route.query, ...{ namespace: v } }
+      query: { ...this.$route.query, ...{ namespace: v } },
     });
   }
 
   get navList() {
     return [
       {
-        subheader: 'Dev'
+        subheader: 'Dev',
       },
       {
         name: 'Deployment',
-        route: { path: '/deployment', query: this.$route.query }
+        route: { path: '/deployment', query: this.$route.query },
       },
       {
         name: 'Service',
-        route: { path: '/service', query: this.$route.query }
+        route: { path: '/service', query: this.$route.query },
       },
       {
         name: 'Pod',
-        route: { path: '/pod', query: this.$route.query }
+        route: { path: '/pod', query: this.$route.query },
       },
       {
-        subheader: 'Production'
+        subheader: 'Production',
+      },
+      {
+        name: 'Alert',
+        route: { path: '/alert', query: this.$route.query },
       },
       {
         name: 'Dashboard',
-        route: { path: '/dashboard', query: this.$route.query }
+        route: { path: '/dashboard', query: this.$route.query },
       },
       {
         name: 'InfluxDB',
-        route: { path: '/influxdb', query: this.$route.query }
+        route: { path: '/influxdb', query: this.$route.query },
       },
       {
         name: 'EdgeNode',
-        route: { path: '/edgenode', query: this.$route.query }
-      }
+        route: { path: '/edgenode', query: this.$route.query },
+      },
     ];
   }
 
   get userMenu() {
     return [
       {
-        title: 'Log Out'
-      }
+        title: 'Log Out',
+      },
     ];
   }
 
@@ -142,7 +146,7 @@ export default class IndexView extends Vue {
       .slice(1)
       .map((e) => {
         return {
-          text: e
+          text: e,
         };
       });
   }
@@ -150,7 +154,7 @@ export default class IndexView extends Vue {
   mounted() {
     if (!this.$route.query.namespace) {
       this.$router.push({
-        query: { ...this.$route.query, ...{ namespace: 'default' } }
+        query: { ...this.$route.query, ...{ namespace: 'default' } },
       });
     }
     this.currentNamespace = String(this.$route.query.namespace);
