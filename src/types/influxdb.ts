@@ -25,3 +25,11 @@ export class Bucket {
   updatedAt!: string;
   retentionRules?: RetentionRules[];
 }
+
+export class Record {
+  time!: {
+    seconds: number;
+    nanos: number;
+  };
+  count!: number;
+}

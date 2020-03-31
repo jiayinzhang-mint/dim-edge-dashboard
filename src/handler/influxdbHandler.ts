@@ -1,5 +1,5 @@
 import BasicHandler from './basicHandler';
-import { Bucket } from '@/types/influxdb';
+import { Bucket, Record } from '@/types/influxdb';
 
 export default class InfluxDBHandler {
   static async checkSetup() {
@@ -75,6 +75,15 @@ export default class InfluxDBHandler {
       bucketID,
     });
     if (rsp.msg === 'success') return Promise.resolve(rsp.bucket as Bucket);
+    return Promise.reject();
+  }
+
+  static async queryData(p: { queryString: string; org: string }) {
+    const rsp = await BasicHandler.getRequest('/api/edgenode/influxdb/query', {
+      queryString: p.queryString,
+      org: p.org,
+    });
+    if (rsp.msg === 'success') return Promise.resolve(rsp.record as Record[]);
     return Promise.reject();
   }
 }

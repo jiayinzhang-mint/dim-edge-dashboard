@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!-- setuped -->
     <v-container fluid v-if="!canSetup">
       <v-row dense>
         <v-col cols="3">
@@ -29,22 +30,48 @@
           </v-row>
         </v-col>
         <v-col cols="9">
-          <v-toolbar flat color="transparent">
-            <v-text-field
-              flat
-              dense
-              solo-inverted
-              label="Query"
-              v-model="query"
-              hide-details
-            ></v-text-field>
-            <v-btn outlined class="ml-3">
+          <v-toolbar color="transparent" dense flat>
+            <v-toolbar-title class="subtitle-1 font-weight-black">
+              Query
+            </v-toolbar-title>
+            <v-spacer></v-spacer>
+            <v-btn outlined @click="queryData">
               <v-icon>mdi-play-outline</v-icon>
             </v-btn>
           </v-toolbar>
+          <v-container fluid>
+            <v-text-field
+              dense
+              flat
+              outlined
+              hide-details
+              v-model="org"
+              label="Org"
+            ></v-text-field>
+            <v-textarea
+              flat
+              auto-grow
+              dense
+              class="mt-2"
+              outlined
+              label="Query"
+              v-model="query"
+              hide-details
+            ></v-textarea>
+          </v-container>
+          <v-toolbar dense color="transparent" flat>
+            <v-toolbar-title class="subtitle-1 font-weight-black">
+              Results
+            </v-toolbar-title>
+          </v-toolbar>
+          <v-container fluid>
+            {{ record }}
+          </v-container>
         </v-col>
       </v-row>
     </v-container>
+
+    <!-- not been setuped -->
     <v-container v-else>
       <v-row
         style="height: calc(100vh - 96px);"
@@ -118,7 +145,7 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 
 import InfluxDBHandler from '@/handler/influxdbHandler';
 
-import { Setup, SignIn, Bucket } from '@/types/influxdb';
+import { Setup, SignIn, Bucket, Record } from '@/types/influxdb';
 import { setupForm, signInForm } from '@/form/influxdb';
 
 @Component
@@ -135,6 +162,10 @@ export default class InfluxDBQuery extends Vue {
   bucketInfoDialog = false;
 
   query = '';
+  org = '';
+  record: Record[] = [];
+
+  timer = 0;
 
   async checkSetup() {
     this.canSetup = await InfluxDBHandler.checkSetup();
@@ -148,6 +179,7 @@ export default class InfluxDBQuery extends Vue {
         );
         await InfluxDBHandler.setup(this.setupParams);
         this.$snack('Setup succeeded', { color: 'success' });
+        this.checkSetup();
       } catch (_) {
         this.$snack('Setup failed', { color: 'error' });
       }
@@ -193,12 +225,23 @@ export default class InfluxDBQuery extends Vue {
     this.bucket = b;
   }
 
+  async queryData() {
+    this.record = await InfluxDBHandler.queryData({
+      queryString: this.query,
+      org: this.org,
+    });
+  }
+
   get setupFormContent() {
     return setupForm;
   }
 
   get signInFormContent() {
     return signInForm;
+  }
+
+  beforeDestroy() {
+    clearInterval(this.timer);
   }
 
   async mounted() {
@@ -209,6 +252,8 @@ export default class InfluxDBQuery extends Vue {
       try {
         await InfluxDBHandler.getAuthorization({ user: 'mint' });
         await this.getBucketList();
+
+        this.timer = setInterval(this.getBucketList, 30000);
       } catch (err) {
         if (err === 401) {
           // force to sign in
