@@ -6,7 +6,7 @@ export default class StatefulSetHandler {
     try {
       const rsp = await BasicHandler.getRequest('/api/k8s/statefulset/list', {
         namespace,
-        serviceName
+        serviceName,
       });
       return Promise.resolve(rsp.items as StatefulSet[]);
     } catch (err) {
@@ -18,7 +18,7 @@ export default class StatefulSetHandler {
     try {
       const rsp = await BasicHandler.getRequest('/api/k8s/statefulset', {
         namespace,
-        name
+        name,
       });
       return Promise.resolve(rsp as StatefulSet);
     } catch (err) {

@@ -10,16 +10,16 @@ export default {
   props: {
     color: {
       type: String,
-      default: 'grey darken-3'
+      default: 'grey darken-3',
     },
 
     message: {
       type: String,
-      required: true
-    }
+      required: true,
+    },
   },
   data: () => ({}),
-  methods: {}
+  methods: {},
 };
 </script>
 

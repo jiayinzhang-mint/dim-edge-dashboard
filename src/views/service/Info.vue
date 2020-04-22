@@ -175,24 +175,24 @@ export default class ServiceInfoView extends Vue {
     return [
       {
         text: 'Name',
-        value: 'name'
+        value: 'name',
       },
       {
         text: 'Protocol',
-        value: 'protocol'
+        value: 'protocol',
       },
       {
         text: 'Port',
-        value: 'port'
+        value: 'port',
       },
       {
         text: 'Target port',
-        value: 'targetPort'
+        value: 'targetPort',
       },
       {
         text: 'Node port',
-        value: 'nodePort'
-      }
+        value: 'nodePort',
+      },
     ];
   }
 

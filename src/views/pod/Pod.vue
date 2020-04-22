@@ -70,28 +70,28 @@ export default class PodView extends Vue {
     return [
       {
         text: 'Name',
-        value: 'name'
+        value: 'name',
       },
       {
         text: 'Namespace',
-        value: 'namespace'
+        value: 'namespace',
       },
       {
         text: 'Created',
-        value: 'created'
+        value: 'created',
       },
       {
         text: 'Host IP',
-        value: 'hostIP'
+        value: 'hostIP',
       },
       {
         text: 'Pod IP',
-        value: 'podIP'
+        value: 'podIP',
       },
       {
         text: 'Actions',
-        value: 'action'
-      }
+        value: 'action',
+      },
     ];
   }
 

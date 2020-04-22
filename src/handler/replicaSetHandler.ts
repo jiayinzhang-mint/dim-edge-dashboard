@@ -6,7 +6,7 @@ export default class ReplicaSetHandler {
     try {
       const rsp = await BasicHandler.getRequest('/api/k8s/replicaset/list', {
         namespace,
-        serviceName
+        serviceName,
       });
       return Promise.resolve(rsp.items as ReplicaSet[]);
     } catch (err) {
@@ -18,7 +18,7 @@ export default class ReplicaSetHandler {
     try {
       const rsp = await BasicHandler.getRequest('/api/k8s/replicaset', {
         namespace,
-        name
+        name,
       });
       return Promise.resolve(rsp as ReplicaSet);
     } catch (err) {

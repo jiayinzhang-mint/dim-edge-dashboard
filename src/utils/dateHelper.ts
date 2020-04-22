@@ -8,7 +8,7 @@ class DateHelper {
       'm+': d.getMinutes(), // 分
       's+': d.getSeconds(), // 秒
       'q+': Math.floor((d.getMonth() + 3) / 3), // 季度
-      S: d.getMilliseconds() // 毫秒
+      S: d.getMilliseconds(), // 毫秒
     };
     if (/(y+)/.test(fmt)) {
       fmt = fmt.replace(

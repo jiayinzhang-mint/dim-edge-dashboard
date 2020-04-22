@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div :id="`chart-${name}`" style="height:400px"></div>
+    <div :id="`chart-${name}`" style="height: 400px;"></div>
   </div>
 </template>
 
@@ -24,49 +24,49 @@ export default class AreaChart extends Vue {
         text: this.title,
         textStyle: {
           color: '#fff',
-          fontSize: 15
-        }
+          fontSize: 15,
+        },
       },
       textStyle: {
-        color: 'rgba(255,255,255,0.7)'
+        color: 'rgba(255,255,255,0.7)',
       },
       xAxis: {
         type: 'time',
         axisLine: {
           lineStyle: {
-            color: 'rgba(255,255,255,0.1)'
-          }
+            color: 'rgba(255,255,255,0.1)',
+          },
         },
         splitLine: {
-          show: false
-        }
+          show: false,
+        },
       },
       yAxis: {
         axisLine: {
           lineStyle: {
-            color: 'rgba(255,255,255,0.1)'
-          }
+            color: 'rgba(255,255,255,0.1)',
+          },
         },
         splitLine: {
           lineStyle: {
-            color: 'rgba(255,255,255,0.1)'
-          }
+            color: 'rgba(255,255,255,0.1)',
+          },
         },
         axisLabel: {
-          formatter: (e: number) => e.toFixed(1) + this.unit || ''
+          formatter: (e: number) => e.toFixed(1) + this.unit || '',
         },
         max: (e) => e.max + 1,
-        min: (e) => (e.min - 1 < 0 ? 0 : e.min - 1)
+        min: (e) => (e.min - 1 < 0 ? 0 : e.min - 1),
       },
       series: [
         {
           type: 'line',
           data: this.dataShow,
           itemStyle: {
-            color: 'rgb(60, 166, 154)'
+            color: 'rgb(60, 166, 154)',
           },
           lineStyle: {
-            color: 'rgb(60, 166, 154)'
+            color: 'rgb(60, 166, 154)',
           },
           symbol: 'emptyCircle',
           smooth: true,
@@ -80,18 +80,18 @@ export default class AreaChart extends Vue {
               colorStops: [
                 {
                   offset: 0,
-                  color: 'rgb(60, 166, 154, 0.8)'
+                  color: 'rgb(60, 166, 154, 0.8)',
                 },
                 {
                   offset: 1,
-                  color: 'rgb(60, 166, 154, 0.1)'
-                }
+                  color: 'rgb(60, 166, 154, 0.1)',
+                },
               ],
-              globalCoord: false // 缺省为 false
-            } as unknown) as string
-          }
-        }
-      ]
+              globalCoord: false, // 缺省为 false
+            } as unknown) as string,
+          },
+        },
+      ],
     });
 
     myChart.resize();
@@ -100,7 +100,7 @@ export default class AreaChart extends Vue {
   get dataShow() {
     return this.data.map((e) => [
       new Date(Number(e[0]) * 1000).toISOString(),
-      e[1]
+      e[1],
     ]);
   }
 

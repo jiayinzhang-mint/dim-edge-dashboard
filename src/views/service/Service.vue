@@ -67,28 +67,28 @@ export default class ServiceView extends Vue {
     return [
       {
         text: 'Name',
-        value: 'name'
+        value: 'name',
       },
       {
         text: 'Namespace',
-        value: 'namespace'
+        value: 'namespace',
       },
       {
         text: 'Created',
-        value: 'created'
+        value: 'created',
       },
       {
         text: 'IP',
-        value: 'IP'
+        value: 'IP',
       },
       {
         text: 'Ports',
-        value: 'port'
+        value: 'port',
       },
       {
         text: 'Actions',
-        value: 'action'
-      }
+        value: 'action',
+      },
     ];
   }
 

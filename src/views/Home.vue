@@ -1,9 +1,9 @@
 <template>
   <v-app>
-    <v-row no-gutters style="height:100vh">
+    <v-row no-gutters style="height: 100vh;">
       <v-col cols="9"> </v-col>
       <v-col cols="3">
-        <v-row no-gutters justify="start" align="center" style="height:100vh">
+        <v-row no-gutters justify="start" align="center" style="height: 100vh;">
           <v-container fluid>
             <div class="headline font-weight-black mb-5">
               DIM<span class="primary--text">edge</span>

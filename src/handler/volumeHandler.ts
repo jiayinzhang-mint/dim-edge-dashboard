@@ -6,7 +6,7 @@ export default class VolumeHandler {
     try {
       const rsp = await BasicHandler.getRequest('/api/k8s/volume/claim/list', {
         namespace,
-        serviceName
+        serviceName,
       });
       return Promise.resolve(rsp.items as VolumeClaim[]);
     } catch (err) {
@@ -18,7 +18,7 @@ export default class VolumeHandler {
     try {
       const rsp = await BasicHandler.getRequest('/api/k8s/volume/claim', {
         namespace,
-        name
+        name,
       });
       return Promise.resolve(rsp as VolumeClaim);
     } catch (err) {
@@ -29,7 +29,7 @@ export default class VolumeHandler {
   static async getVolumeList(serviceName?: string) {
     try {
       const rsp = await BasicHandler.getRequest('/api/k8s/volume/list', {
-        serviceName
+        serviceName,
       });
       return Promise.resolve(rsp.items);
     } catch (err) {
@@ -40,7 +40,7 @@ export default class VolumeHandler {
   static async getOneVolume(name: string) {
     try {
       const rsp = await BasicHandler.getRequest('/api/k8s/volume', {
-        name
+        name,
       });
       return Promise.resolve(rsp.items);
     } catch (err) {

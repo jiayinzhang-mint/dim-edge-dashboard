@@ -10,19 +10,19 @@ interface RootState {
 }
 
 const state: RootState = {
-  namespaceList: []
+  namespaceList: [],
 };
 
 const getters = {
   namespaceNameList: (s: RootState) => {
     return s.namespaceList.map((e) => e.metadata.name);
-  }
+  },
 };
 
 const mutations = {
   updateNamespaceList: (s: RootState, n: Namespace[]) => {
     s.namespaceList = n;
-  }
+  },
 };
 
 const actions = {
@@ -33,12 +33,12 @@ const actions = {
     } catch (err) {
       console.log(err);
     }
-  }
+  },
 };
 
 export default new Vuex.Store<RootState>({
   state,
   getters,
   mutations,
-  actions
+  actions,
 });

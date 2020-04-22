@@ -5,7 +5,7 @@ export const mapToList = (map: any) => {
       const e = map[key];
       list.push({
         text: key,
-        value: e
+        value: e,
       });
     }
   }

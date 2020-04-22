@@ -5,7 +5,7 @@ export default class ServiceHandler {
   static async getServiceList(namespace: string) {
     try {
       const rsp = await BasicHandler.getRequest('/api/k8s/service/list', {
-        namespace
+        namespace,
       });
       return Promise.resolve(rsp.items as Service[]);
     } catch (err) {
@@ -17,7 +17,7 @@ export default class ServiceHandler {
     try {
       const rsp = await BasicHandler.getRequest('/api/k8s/service', {
         namespace,
-        name
+        name,
       });
       return Promise.resolve(rsp as Service);
     } catch (err) {
