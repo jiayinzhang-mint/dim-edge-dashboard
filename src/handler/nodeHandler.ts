@@ -17,7 +17,7 @@ export default class NodeHandler {
   static async getOneNodeMetrics(name: string) {
     try {
       const rsp = await BasicHandler.getRequest('/api/k8s/node/metrics', {
-        name
+        name,
       });
       return Promise.resolve(rsp as Metrics);
     } catch (err) {

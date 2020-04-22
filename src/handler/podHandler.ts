@@ -6,7 +6,7 @@ export default class PodHandler {
     try {
       const rsp = await BasicHandler.getRequest('/api/k8s/pod/list', {
         namespace,
-        serviceName
+        serviceName,
       });
       return Promise.resolve(rsp.items as Pod[]);
     } catch (err) {
@@ -18,7 +18,7 @@ export default class PodHandler {
     try {
       const rsp = await BasicHandler.getRequest('/api/k8s/pod', {
         namespace,
-        name
+        name,
       });
       return Promise.resolve(rsp as Pod);
     } catch (err) {
@@ -30,7 +30,7 @@ export default class PodHandler {
     try {
       const rsp = await BasicHandler.getRequest('/api/k8s/pod/metrics/list', {
         namespace,
-        serviceName
+        serviceName,
       });
       return Promise.resolve(rsp.items as Metrics[]);
     } catch (err) {
@@ -42,7 +42,7 @@ export default class PodHandler {
     try {
       const rsp = await BasicHandler.getRequest('/api/k8s/pod/metrics', {
         namespace,
-        name
+        name,
       });
       return Promise.resolve(rsp.containers as Metrics[]);
     } catch (err) {

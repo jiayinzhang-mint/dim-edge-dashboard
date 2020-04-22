@@ -6,7 +6,7 @@ export default class DeploymentHandler {
     try {
       const rsp = await BasicHandler.getRequest('/api/k8s/deployment/list', {
         namespace,
-        serviceName
+        serviceName,
       });
       return Promise.resolve(rsp.items as any[]);
     } catch (err) {
@@ -18,7 +18,7 @@ export default class DeploymentHandler {
     try {
       const rsp = await BasicHandler.getRequest('/api/k8s/deployment', {
         namespace,
-        name
+        name,
       });
       return Promise.resolve(rsp as any);
     } catch (err) {

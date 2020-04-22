@@ -179,6 +179,7 @@ export default class InfluxDBQuery extends Vue {
   record: Record[] = [];
 
   timer = 0;
+  loading = false;
 
   async checkSetup() {
     this.canSetup = await InfluxDBHandler.checkSetup();
