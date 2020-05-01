@@ -3,7 +3,13 @@
     <v-col cols="5" style="height: calc(100vh - 48px);" class="overflow-y-auto">
       <v-list flat color="transparent">
         <div v-for="(item, i) in alert" :key="`al-${i}`">
-          <v-list-item two-line @click="currentAlert = item">
+          <v-list-item
+            :style="
+              currentAlert == item ? `background:rgba(255,255,255,0.2)` : ``
+            "
+            two-line
+            @click="currentAlert = item"
+          >
             <v-list-item-content>
               <v-list-item-subtitle class="font-weight-black mb-2">
                 <v-icon
