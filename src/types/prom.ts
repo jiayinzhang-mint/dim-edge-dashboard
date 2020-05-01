@@ -2,6 +2,7 @@ export class Query {
   metrics!: string;
   container?: string;
   pod?: string;
+  id?: string
 
   end!: string;
   duration!: string;
@@ -11,9 +12,9 @@ export class Query {
     let condition = '';
     condition += `service = "dim-edge-mon-prometheus-op-kubelet",`;
 
-    if (this.pod) {
-      condition += `pod = "${this.pod}",`;
-    }
+    if (this.container) condition += `container = "${this.container}",`;
+    if (this.pod) condition += `pod = "${this.pod}",`;
+    if (this.id) condition += `id = "${this.id}"`
 
     const query = `${this.metrics}{${condition}}`;
     return query;

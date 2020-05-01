@@ -120,9 +120,9 @@
             </v-col>
             <v-col cols="6">
               <AreaChart
-                title="Recent Memory Percentage"
+                title="Recent Memory Usage"
                 name="node-mem"
-                unit="%"
+                unit="MB"
                 :data="nodeMemMetricRange"
               ></AreaChart>
             </v-col>
@@ -224,7 +224,7 @@ export default class InfluxDBInfoView extends Vue {
       )[0].values.map((e) => [e[0], Number(e[1]) * 100]);
       this.nodeMemMetricRange = (
         await PromHandler.getMemUsageRange(q)
-      )[0].values.map((e) => [e[0], (Number(e[1]) / 1000000 / 50) * 100]);
+      )[0].values.map((e) => [e[0], Number(e[1]) / 1000000]);
       this.nodeFsMetricRange = (
         await PromHandler.getFsUsageRange(q)
       )[0].values.map((e) => [e[0], Number(e[1]) / 1000000]);

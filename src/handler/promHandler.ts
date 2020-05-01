@@ -17,11 +17,10 @@ export default class PromHandler {
     return Promise.reject([]);
   }
 
-  static async getMemPercentageRange(q: Query) {
-    q.metrics = 'container_memory_working_set_bytes';
-
+  static async getSystemCPUPercentageRange(q: Query) {
+    const queryStr = `sum (rate (container_cpu_usage_seconds_total{id="/"}[1m])) / sum (machine_cpu_cores) * 100`
     const rsp = await basicHandler.getRequest('/api/prometheus/query/range', {
-      query: q.getQueryStr(),
+      query: queryStr.replace(/\u21b5/g, ''),
       duration: q.duration,
       step: q.step,
     });
@@ -33,7 +32,7 @@ export default class PromHandler {
   }
 
   static async getMemUsageRange(q: Query) {
-    q.metrics = 'container_memory_working_set_bytes';
+    q.metrics = 'container_memory_usage_bytes';
 
     const rsp = await basicHandler.getRequest('/api/prometheus/query/range', {
       query: q.getQueryStr(),

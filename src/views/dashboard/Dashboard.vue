@@ -101,12 +101,37 @@
         </v-col>
       </v-row>
 
+      <v-toolbar dense class="transparent" flat>
+        <v-toolbar-title class="subtitle-1 font-weight-black"
+          >Recent</v-toolbar-title
+        >
+      </v-toolbar>
+      <v-row dense>
+        <v-col cols="6">
+          <AreaChart
+            title="Recent CPU Usage"
+            name="system-cpu"
+            unit="%"
+            :data="cpuMetricRange"
+          ></AreaChart>
+        </v-col>
+        <v-col cols="6">
+          <AreaChart
+            title="Recent Memory Usage"
+            name="system-memory"
+            unit="GB"
+            :data="memoryMetricRange"
+          ></AreaChart>
+        </v-col>
+      </v-row>
+
       <v-row no-gutters>
         <v-toolbar dense class="transparent" flat>
           <v-toolbar-title class="subtitle-1 font-weight-black"
             >Conditions</v-toolbar-title
           >
         </v-toolbar>
+
         <v-col cols="12">
           <v-data-table
             class="transparent"
@@ -133,12 +158,21 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 import NodeHandler from '@/handler/nodeHandler';
 import { Metrics, K8SNode } from '@/types/backend';
 import { loadProgress } from '@/utils/progress';
+import PromHandler from '@/handler/promHandler';
+import { Query } from '@/types/prom';
 
-@Component
+import AreaChart from '@/components/AreaChart.vue';
+
+@Component({
+  components: { AreaChart },
+})
 export default class DashboardView extends Vue {
   metrics: Metrics = new Metrics();
   minikubeNode: K8SNode = new K8SNode();
   timer = 0;
+
+  memoryMetricRange: (string | number)[][] = [];
+  cpuMetricRange: (string | number)[][] = [];
 
   async getMetrics() {
     this.metrics = await NodeHandler.getOneNodeMetrics('minikube');
@@ -146,6 +180,18 @@ export default class DashboardView extends Vue {
 
   async getNode() {
     this.minikubeNode = await NodeHandler.getOneNode('minikube');
+  }
+
+  async getMemoryRange() {
+    const q = new Query();
+    q.id = '/';
+    this.memoryMetricRange = (
+      await PromHandler.getMemUsageRange(q)
+    )[0].values.map((e) => [e[0], Number(e[1]) / 1000000000]);
+
+    this.cpuMetricRange = (
+      await PromHandler.getSystemCPUPercentageRange(q)
+    )[0].values.map((e) => [e[0], e[1]]);
   }
 
   get cpuLoadPercent() {
@@ -195,10 +241,12 @@ export default class DashboardView extends Vue {
   async mounted() {
     this.getMetrics();
     this.getNode();
+    this.getMemoryRange();
 
     this.timer = setInterval(() => {
       this.getMetrics();
       this.getNode();
+      this.getMemoryRange();
     }, 10000);
   }
 
