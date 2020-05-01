@@ -17,7 +17,7 @@
       <v-layout fill-height v-if="button" align-center justify-center>
         <slot></slot>
       </v-layout>
-      <v-card-text v-else class="white--text"><slot></slot></v-card-text>
+      <v-card-text v-else><slot></slot></v-card-text>
     </v-card>
   </v-hover>
 </template>

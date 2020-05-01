@@ -7,6 +7,7 @@
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
 import echarts from 'echarts';
+import colors from 'vuetify/es5/util/colors';
 
 @Component
 export default class AreaChart extends Vue {
@@ -15,26 +16,34 @@ export default class AreaChart extends Vue {
   @Prop(String) unit!: string;
   @Prop() data!: (string | number)[][];
 
+  get color() {
+    return this.$vuetify.theme.dark
+      ? colors.grey.lighten1
+      : colors.grey.darken4;
+  }
+
   initChart() {
     const d = document.getElementById(`chart-${this.name}`) as HTMLDivElement;
     const myChart = echarts.init(d);
+
+    console.log(this.color);
 
     myChart.setOption({
       title: {
         text: this.title,
         textStyle: {
-          color: '#fff',
+          color: this.color,
           fontSize: 15,
         },
       },
       textStyle: {
-        color: 'rgba(255,255,255,0.7)',
+        color: this.color,
       },
       xAxis: {
         type: 'time',
         axisLine: {
           lineStyle: {
-            color: 'rgba(255,255,255,0.1)',
+            color: 'rgba(100,100,100,0.4)',
           },
         },
         splitLine: {
@@ -44,12 +53,12 @@ export default class AreaChart extends Vue {
       yAxis: {
         axisLine: {
           lineStyle: {
-            color: 'rgba(255,255,255,0.1)',
+            color: 'rgba(100,100,100,0.4)',
           },
         },
         splitLine: {
           lineStyle: {
-            color: 'rgba(255,255,255,0.1)',
+            color: 'rgba(100,100,100,0.4)',
           },
         },
         axisLabel: {

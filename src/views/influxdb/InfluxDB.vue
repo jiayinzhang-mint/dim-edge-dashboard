@@ -13,10 +13,10 @@
                   :value="readyReplicas"
                   color="primary"
                 >
-                  <div class="font-weight-black headline white--text">
+                  <div class="font-weight-black headline">
                     {{ readyReplicas || 0 }}
                   </div>
-                  <span class="ml-1 white--text">%</span>
+                  <span class="ml-1">%</span>
                 </v-progress-circular>
               </v-row>
             </v-container>

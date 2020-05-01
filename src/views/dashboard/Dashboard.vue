@@ -13,10 +13,10 @@
                   :value="cpuLoadPercent"
                   :color="getLoadProgress(cpuLoadPercent)"
                 >
-                  <div class="font-weight-black headline white--text">
+                  <div class="font-weight-black headline">
                     {{ cpuLoadPercent || 0 }}
                   </div>
-                  <span class="ml-1 white--text">%</span>
+                  <span class="ml-1">%</span>
                 </v-progress-circular>
               </v-row>
             </v-container>
@@ -62,10 +62,10 @@
                   :value="memoryLoadPercent"
                   :color="getLoadProgress(memoryLoadPercent)"
                 >
-                  <div class="font-weight-black headline white--text">
+                  <div class="font-weight-black headline">
                     {{ memoryLoadPercent || 0 }}
                   </div>
-                  <span class="ml-1 white--text">%</span>
+                  <span class="ml-1">%</span>
                 </v-progress-circular>
               </v-row>
             </v-container>
@@ -101,12 +101,7 @@
         </v-col>
       </v-row>
 
-      <v-toolbar dense class="transparent" flat>
-        <v-toolbar-title class="subtitle-1 font-weight-black"
-          >Recent</v-toolbar-title
-        >
-      </v-toolbar>
-      <v-row dense>
+      <v-row dense class="mt-3">
         <v-col cols="6">
           <AreaChart
             title="Recent CPU Usage"

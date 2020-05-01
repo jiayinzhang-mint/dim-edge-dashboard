@@ -34,7 +34,15 @@
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
-    <v-app-bar flat class="acrylic" app dense>
+    <v-app-bar
+      flat
+      class="acrylic"
+      app
+      dense
+      :color="
+        $vuetify.theme.dark ? `rgba(37,37,37,0.3)` : `rgba(235,235,235,0.3)`
+      "
+    >
       <v-btn icon small class="ml-0" @click="$router.go(-1)"
         ><v-icon size="20">mdi-arrow-left</v-icon></v-btn
       >

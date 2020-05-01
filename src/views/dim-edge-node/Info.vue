@@ -16,10 +16,10 @@
                         :value="cpuPercent"
                         :color="getLoadProgress(cpuPercent)"
                       >
-                        <div class="font-weight-black headline white--text">
+                        <div class="font-weight-black headline">
                           {{ cpuPercent || 0 }}
                         </div>
-                        <span class="ml-1 white--text">%</span>
+                        <span class="ml-1">%</span>
                       </v-progress-circular>
                     </v-row>
                   </v-container>
@@ -68,10 +68,10 @@
                         :value="memoryPercent"
                         :color="getLoadProgress(memoryPercent)"
                       >
-                        <div class="font-weight-black headline white--text">
+                        <div class="font-weight-black headline">
                           {{ memoryPercent || 0 }}
                         </div>
-                        <span class="ml-1 white--text">%</span>
+                        <span class="ml-1">%</span>
                       </v-progress-circular>
                     </v-row>
                   </v-container>
@@ -107,9 +107,9 @@
                 </v-row>
               </info-card>
             </v-col>
+          </v-row>
 
-            <v-col cols="6"> </v-col>
-
+          <v-row dense class="mt-3">
             <v-col cols="6">
               <AreaChart
                 title="Recent CPU Percentage"
