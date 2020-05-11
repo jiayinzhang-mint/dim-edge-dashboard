@@ -102,7 +102,7 @@
       </v-row>
 
       <v-row dense class="mt-3">
-        <v-col cols="6">
+        <v-col cols="12">
           <AreaChart
             title="Recent CPU Usage"
             name="system-cpu"
@@ -110,11 +110,11 @@
             :data="cpuMetricRange"
           ></AreaChart>
         </v-col>
-        <v-col cols="6">
+        <v-col cols="12">
           <AreaChart
             title="Recent Memory Usage"
             name="system-memory"
-            unit="GB"
+            unit="MB"
             :data="memoryMetricRange"
           ></AreaChart>
         </v-col>
@@ -182,7 +182,7 @@ export default class DashboardView extends Vue {
     q.id = '/';
     this.memoryMetricRange = (
       await PromHandler.getMemUsageRange(q)
-    )[0].values.map((e) => [e[0], Number(e[1]) / 1000000000]);
+    )[0].values.map((e) => [e[0], Number(e[1]) / 1000000]);
 
     this.cpuMetricRange = (
       await PromHandler.getSystemCPUPercentageRange(q)

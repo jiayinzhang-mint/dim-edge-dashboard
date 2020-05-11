@@ -39,6 +39,9 @@ export default class AreaChart extends Vue {
       textStyle: {
         color: this.color,
       },
+      tooltip: {
+        show: true,
+      },
       xAxis: {
         type: 'time',
         axisLine: {
