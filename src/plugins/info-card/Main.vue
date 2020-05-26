@@ -34,6 +34,6 @@ export default class InfoCard extends Vue {
 
 <style scoped>
 .info-card {
-  background: transparent;
+  background: transparent !important;
 }
 </style>

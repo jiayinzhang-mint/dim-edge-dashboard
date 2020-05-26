@@ -119,6 +119,10 @@ export default class IndexView extends Vue {
         route: { path: '/pod', query: this.$route.query },
       },
       {
+        name: 'Tracing',
+        route: { path: '/tracing', query: this.$route.query },
+      },
+      {
         subheader: 'Production',
       },
       {

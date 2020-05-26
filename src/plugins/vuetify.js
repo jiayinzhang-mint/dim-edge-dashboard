@@ -9,7 +9,7 @@ export default new Vuetify({
     options: {
       customProperties: true,
     },
-    dark: false,
+    dark: true,
     themes: {
       dark: {
         primary: colors.teal.lighten2,
